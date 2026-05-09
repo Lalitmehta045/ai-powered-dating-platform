@@ -12,7 +12,7 @@ import { logger } from "../../logger/logger";
 
 // ── Constants ────────────────────────────────────────────────
 
-const DAILY_SWIPE_LIMIT = 500;
+const DAILY_SWIPE_LIMIT = 10;
 
 // ── Private helpers ──────────────────────────────────────────
 
@@ -37,27 +37,39 @@ const invalidateRecommendationCaches = async (
 };
 
 /**
- * Enforces the daily swipe limit using Redis.
+ * Enforces the daily swipe limit.
+ * Uses Redis for high performance, falls back to DB query if Redis is down.
  * Premium users bypass this check.
- * 
- * Storage Strategy:
- * - Counter is stored in Redis with a 24-hour TTL, auto-expiring
- *   the next day without needing a cron job.
  */
 const enforceSwipeLimit = async (params: {
   userId: string;
   isPremium: boolean;
 }) => {
-  if (params.isPremium || !isRedisConnected()) {
+  if (params.isPremium) {
     return { allowed: true };
   }
 
-  const key = `swipe_count:${params.userId}`;
-  const redis = getRedisClient();
-  const currentCount = await redis.incr(key);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
-  if (currentCount === 1) {
-    await redis.expire(key, 24 * 60 * 60); // 24 hours TTL
+  let currentCount = 0;
+
+  if (isRedisConnected()) {
+    const key = `swipe_count:${params.userId}`;
+    const redis = getRedisClient();
+    currentCount = await redis.incr(key);
+
+    if (currentCount === 1) {
+      await redis.expire(key, 24 * 60 * 60); // 24 hours TTL
+    }
+  } else {
+    // DB Fallback: Count swipes created today
+    currentCount = await Swipe.countDocuments({
+      swiperId: params.userId,
+      createdAt: { $gte: today }
+    });
+    // Add 1 because we are checking for the NEXT swipe
+    currentCount += 1;
   }
 
   if (currentCount > DAILY_SWIPE_LIMIT) {
