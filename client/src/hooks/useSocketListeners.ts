@@ -97,7 +97,10 @@ export const useSocketListeners = () => {
     });
 
     socket.on('notification:new', (notification) => {
-      toast.success(notification.message || 'New notification!');
+      const notificationsEnabled = user?.settings?.notificationsEnabled ?? true;
+      if (notificationsEnabled) {
+        toast.success(notification.message || 'New notification!');
+      }
     });
 
     return () => {
