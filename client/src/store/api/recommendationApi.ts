@@ -8,6 +8,11 @@ interface RecommendationResponse {
     page: number;
     limit: number;
     results: number;
+    swipeLimit?: {
+      allowed: boolean;
+      remaining: number;
+      limit: number;
+    };
   };
 }
 

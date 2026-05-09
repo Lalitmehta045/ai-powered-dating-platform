@@ -5,6 +5,8 @@ import { AppError } from "../../errors/AppError";
 import { asyncHandler } from "../../utils/asyncHandler";
 import { ApiResponse } from "../../utils/ApiResponse";
 import { AuthRequest } from "../../middleware/auth.middleware";
+import { checkSwipeLimit } from "../match/match.service";
+import User from "../auth/auth.model";
 
 /**
  * User Controller
@@ -94,12 +96,21 @@ export const getRecommendations = asyncHandler(
       filters,
       req.query as Record<string, unknown>
     );
+
+    // Get swipe limit status
+    const user = await User.findById(req.userId);
+    const swipeStatus = await checkSwipeLimit({
+      userId: req.userId,
+      isPremium: !!user?.isPremium,
+      increment: false
+    });
     
     return ApiResponse.paginated(res, "Recommendations retrieved", {
       page: payload.page,
       limit: payload.limit,
       results: payload.results,
-      users: payload.users
+      users: payload.users,
+      swipeLimit: swipeStatus
     });
   }
 );

@@ -40,13 +40,17 @@ const invalidateRecommendationCaches = async (
  * Enforces the daily swipe limit.
  * Uses Redis for high performance, falls back to DB query if Redis is down.
  * Premium users bypass this check.
+ * 
+ * @param increment If true, increments the swipe counter (used when actually swiping).
+ *                  If false, only checks the current count.
  */
-const enforceSwipeLimit = async (params: {
+export const checkSwipeLimit = async (params: {
   userId: string;
   isPremium: boolean;
+  increment?: boolean;
 }) => {
   if (params.isPremium) {
-    return { allowed: true };
+    return { allowed: true, remaining: 999, limit: DAILY_SWIPE_LIMIT };
   }
 
   const today = new Date();
@@ -57,10 +61,15 @@ const enforceSwipeLimit = async (params: {
   if (isRedisConnected()) {
     const key = `swipe_count:${params.userId}`;
     const redis = getRedisClient();
-    currentCount = await redis.incr(key);
-
-    if (currentCount === 1) {
-      await redis.expire(key, 24 * 60 * 60); // 24 hours TTL
+    
+    if (params.increment) {
+      currentCount = await redis.incr(key);
+      if (currentCount === 1) {
+        await redis.expire(key, 24 * 60 * 60); // 24 hours TTL
+      }
+    } else {
+      const val = await redis.get(key);
+      currentCount = val ? parseInt(val) : 0;
     }
   } else {
     // DB Fallback: Count swipes created today
@@ -68,16 +77,17 @@ const enforceSwipeLimit = async (params: {
       swiperId: params.userId,
       createdAt: { $gte: today }
     });
-    // Add 1 because we are checking for the NEXT swipe
-    currentCount += 1;
+    if (params.increment) {
+      currentCount += 1;
+    }
   }
 
-  if (currentCount > DAILY_SWIPE_LIMIT) {
-    return {
-      allowed: false,
-      remaining: 0,
-      limit: DAILY_SWIPE_LIMIT,
-    };
+  if (currentCount >= DAILY_SWIPE_LIMIT && params.increment) {
+     return { allowed: false, remaining: 0, limit: DAILY_SWIPE_LIMIT };
+  }
+
+  if (currentCount >= DAILY_SWIPE_LIMIT) {
+    return { allowed: false, remaining: 0, limit: DAILY_SWIPE_LIMIT };
   }
 
   return {
@@ -129,9 +139,10 @@ export class MatchService {
       throw AppError.notFound("User not found");
     }
 
-    const swipeLimit = await enforceSwipeLimit({
+    const swipeLimit = await checkSwipeLimit({
       userId: currentUserId,
       isPremium: Boolean(currentUser.isPremium),
+      increment: true,
     });
     if (!swipeLimit.allowed) {
       throw AppError.tooManyRequests(
@@ -242,9 +253,10 @@ export class MatchService {
       throw AppError.notFound("User not found");
     }
 
-    const swipeLimit = await enforceSwipeLimit({
+    const swipeLimit = await checkSwipeLimit({
       userId: currentUserId,
       isPremium: Boolean(currentUser.isPremium),
+      increment: true,
     });
     if (!swipeLimit.allowed) {
       throw AppError.tooManyRequests(
