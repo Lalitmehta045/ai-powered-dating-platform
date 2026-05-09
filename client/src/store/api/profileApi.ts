@@ -7,6 +7,9 @@ interface UpdateProfilePayload {
   interests?: string[];
   gender?: string;
   profileImage?: string; // Assume base64 or URL for now
+  settings?: {
+    notificationsEnabled: boolean;
+  };
 }
 
 export const profileApi = baseApi.injectEndpoints({

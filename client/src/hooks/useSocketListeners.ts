@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 import { socketClient } from '../socket/socketClient';
@@ -15,6 +15,14 @@ import { chatApi } from '../store/api/chatApi';
 export const useSocketListeners = () => {
   const dispatch = useDispatch();
   const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
+  const { activeChatId } = useSelector((state: RootState) => state.message);
+  
+  // Use a ref to track activeChatId so the socket closure always sees the latest value
+  const activeChatIdRef = useRef(activeChatId);
+  
+  useEffect(() => {
+    activeChatIdRef.current = activeChatId;
+  }, [activeChatId]);
 
   useEffect(() => {
     const socket = socketClient.getSocket();
@@ -68,8 +76,15 @@ export const useSocketListeners = () => {
       // Also invalidate Match list to update lastMessage and unread counts
       dispatch(chatApi.util.invalidateTags(['Match']));
 
-      // Only show toast if we are NOT currently in that chat
-      if (message.senderId !== user?.id && message.senderId !== user?._id) {
+      // Only show toast if:
+      // 1. We are NOT the sender
+      // 2. We are NOT currently in that chat (message.matchId !== activeChatId)
+      // 3. User has notifications ENABLED in settings
+      const isMe = message.senderId === user?.id || message.senderId === user?._id;
+      const isInActiveChat = message.matchId === activeChatIdRef.current;
+      const notificationsEnabled = user?.settings?.notificationsEnabled ?? true;
+
+      if (!isMe && !isInActiveChat && notificationsEnabled) {
         toast('New message received', {
           icon: '💬',
           style: {

@@ -15,6 +15,9 @@ export const updateProfileSchema = z.object({
     .optional(),
   interestedIn: z.string().optional(),
   interests: z.array(z.string()).optional(),
+  settings: z.object({
+    notificationsEnabled: z.boolean().optional(),
+  }).optional(),
 });
 
 // ── Recommendation query schema ──────────────────────────────

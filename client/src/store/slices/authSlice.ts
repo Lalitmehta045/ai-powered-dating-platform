@@ -12,6 +12,9 @@ export interface User {
   age?: number;
   interests?: string[];
   isPremium?: boolean;
+  settings?: {
+    notificationsEnabled: boolean;
+  };
 }
 
 interface AuthState {

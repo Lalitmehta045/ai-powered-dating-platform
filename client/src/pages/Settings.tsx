@@ -1,17 +1,20 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Bell, Lock, LogOut, Moon, Trash2, ChevronRight } from 'lucide-react';
+import { ArrowLeft, Bell, Lock, LogOut, Moon, Trash2, ChevronRight, Check } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 import type { RootState } from '../store/store';
-import { logout } from '../store/slices/authSlice';
+import { logout, updateUser } from '../store/slices/authSlice';
 import { socketClient } from '../socket/socketClient';
+import { useUpdateProfileMutation } from '../store/api/profileApi';
 
 export const Settings = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.auth.user);
+  const [updateProfile, { isLoading: isUpdating }] = useUpdateProfileMutation();
 
   const handleLogout = () => {
     dispatch(logout());
@@ -19,11 +22,42 @@ export const Settings = () => {
     navigate('/login', { state: { logoutSuccess: true } });
   };
 
+  const notificationsEnabled = user?.settings?.notificationsEnabled ?? true;
+
+  const toggleNotifications = async () => {
+    const newState = !notificationsEnabled;
+    
+    // Optimistic update
+    dispatch(updateUser({ 
+      settings: { ...user?.settings, notificationsEnabled: newState } 
+    }));
+
+    try {
+      await updateProfile({ 
+        settings: { notificationsEnabled: newState } 
+      }).unwrap();
+      toast.success(`Notifications ${newState ? 'enabled' : 'disabled'}`);
+    } catch (err) {
+      // Revert on error
+      dispatch(updateUser({ 
+        settings: { ...user?.settings, notificationsEnabled: !newState } 
+      }));
+      toast.error('Failed to update settings');
+    }
+  };
+
   const settingsGroups = [
     {
       title: 'Account',
       items: [
-        { icon: Bell, label: 'Notifications', value: 'Enabled' },
+        { 
+          icon: Bell, 
+          label: 'Notifications', 
+          value: notificationsEnabled ? 'Enabled' : 'Disabled',
+          onClick: toggleNotifications,
+          isToggle: true,
+          active: notificationsEnabled
+        },
         { icon: Lock, label: 'Privacy', value: 'Standard' },
         { icon: Moon, label: 'Theme', value: 'Dark' },
       ]
@@ -57,21 +91,34 @@ export const Settings = () => {
               {group.items.map((item, itemIdx) => (
                 <div 
                   key={itemIdx}
+                  onClick={item.onClick}
                   className="flex items-center justify-between p-4 hover:bg-white/5 cursor-pointer transition-colors border-b border-border/30 last:border-0"
                 >
                   <div className="flex items-center gap-3">
                     {item.icon && <item.icon className="w-5 h-5 text-text-primary" />}
                     <span className="text-white font-medium">{item.label}</span>
                   </div>
-                  <div className="flex items-center gap-2 text-text-secondary">
-                    {item.value && <span className="text-sm">{item.value}</span>}
-                    <ChevronRight className="w-4 h-4" />
+                  <div className="flex items-center gap-3">
+                    {item.isToggle ? (
+                      <div className={`w-11 h-6 rounded-full transition-colors relative ${item.active ? 'bg-primary' : 'bg-white/10'}`}>
+                        <motion.div 
+                          animate={{ x: item.active ? 22 : 2 }}
+                          className="absolute top-1 w-4 h-4 rounded-full bg-white shadow-sm"
+                        />
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-2 text-text-secondary">
+                        {item.value && <span className="text-sm">{item.value}</span>}
+                        <ChevronRight className="w-4 h-4" />
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}
             </div>
           </div>
         ))}
+        {/* ... rest of the component remains similar ... */}
 
         <div>
           <h2 className="text-sm font-bold text-text-secondary uppercase tracking-wider mb-4 px-2">

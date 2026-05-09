@@ -74,6 +74,13 @@ const userSchema = new mongoose.Schema(
       enum: ["free", "monthly", "yearly"],
       default: "free",
     },
+    
+    settings: {
+      notificationsEnabled: {
+        type: Boolean,
+        default: true,
+      },
+    },
   },
   {
     timestamps: true,
