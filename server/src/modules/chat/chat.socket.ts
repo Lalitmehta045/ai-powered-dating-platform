@@ -9,6 +9,7 @@ import { getRedisClient, isRedisConnected } from "../../redis/redis";
 import { createAndEmitNotification } from "../notification/notification.socket";
 import { logger } from "../../logger/logger";
 import { aiService } from "../ai/ai.service";
+import Match from "../match/match.model";
 
 type AckResponse = {
   success: boolean;
@@ -34,6 +35,9 @@ const fallbackConnections = new Map<string, number>();
  */
 const emitStatusChange = (io: SocketIOServer, userId: string, status: "online" | "offline") => {
   try {
+    const event = status === "online" ? "user-online" : "user-offline";
+    io.emit(event, userId);
+    // Keep the status-changed for any other potential listeners
     io.emit("user-status-changed", { userId, status });
   } catch {
     // Socket broadcasts must never crash.
@@ -105,6 +109,8 @@ export const registerChatSocketHandlers = (io: SocketIOServer) => {
     // ── Handle Connect (Online Status Tracking) ──────────────────
     void (async () => {
       try {
+        let currentOnlineUsers: string[] = [];
+        
         if (isRedisConnected()) {
           const redis = getRedisClient();
           const activeConnections = await redis.hIncrBy(
@@ -114,6 +120,8 @@ export const registerChatSocketHandlers = (io: SocketIOServer) => {
             await redis.sAdd(ONLINE_USERS_SET_KEY, currentUserId);
             emitStatusChange(io, currentUserId, "online");
           }
+          
+          currentOnlineUsers = await redis.sMembers(ONLINE_USERS_SET_KEY);
         } else {
           const localConnections = (fallbackConnections.get(currentUserId) || 0) + 1;
           fallbackConnections.set(currentUserId, localConnections);
@@ -121,7 +129,12 @@ export const registerChatSocketHandlers = (io: SocketIOServer) => {
             fallbackOnlineUsers.add(currentUserId);
             emitStatusChange(io, currentUserId, "online");
           }
+          
+          currentOnlineUsers = Array.from(fallbackOnlineUsers);
         }
+        
+        // Send initial online users list to the newly connected user
+        socket.emit("online-users", currentOnlineUsers);
       } catch {
         // Silent fallback
       }
@@ -171,9 +184,10 @@ export const registerChatSocketHandlers = (io: SocketIOServer) => {
 
         const messagePayload = {
           _id: savedMessage._id,
-          sender: savedMessage.sender,
-          receiver: savedMessage.receiver,
-          text: savedMessage.text,
+          matchId: payload?.matchId, // Include matchId for client cache updates
+          senderId: savedMessage.sender,
+          receiverId: savedMessage.receiver,
+          content: savedMessage.text,
           isRead: savedMessage.isRead,
           createdAt: savedMessage.createdAt,
           updatedAt: savedMessage.updatedAt,
@@ -217,7 +231,7 @@ export const registerChatSocketHandlers = (io: SocketIOServer) => {
 
       if (!targetUserId || !mongoose.isValidObjectId(targetUserId)) return;
       
-      io.to(targetUserId).emit("typing", { from: currentUserId, matchId });
+      io.to(targetUserId).emit("typing", { userId: currentUserId, matchId });
     });
 
     socket.on("stop-typing", async (payload) => {
@@ -234,7 +248,7 @@ export const registerChatSocketHandlers = (io: SocketIOServer) => {
 
       if (!targetUserId || !mongoose.isValidObjectId(targetUserId)) return;
       
-      io.to(targetUserId).emit("stop-typing", { from: currentUserId, matchId });
+      io.to(targetUserId).emit("stop-typing", { userId: currentUserId, matchId });
     });
 
     // ── message-read ──────────────────────────────────────────────

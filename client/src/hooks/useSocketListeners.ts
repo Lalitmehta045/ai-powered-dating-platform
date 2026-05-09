@@ -23,47 +23,52 @@ export const useSocketListeners = () => {
 
     // Handle online users
     socket.on('online-users', (users: string[]) => {
+      console.log('Received online-users:', users);
       dispatch(setOnlineUsers(users));
     });
 
     socket.on('user-online', (userId: string) => {
+      console.log('User online:', userId);
       dispatch(userOnline(userId));
     });
 
     socket.on('user-offline', (userId: string) => {
+      console.log('User offline:', userId);
       dispatch(userOffline(userId));
     });
 
     // Handle typing indicators
     socket.on('typing', ({ matchId, userId }) => {
+      console.log('User typing:', { matchId, userId });
       dispatch(setTyping({ matchId, userId }));
     });
 
     socket.on('stop-typing', ({ matchId }) => {
+      console.log('User stopped typing:', matchId);
       dispatch(stopTyping({ matchId }));
     });
 
     // Handle incoming messages
     socket.on('receive-message', (message: any) => {
+      console.log('Received message:', message);
       // Optimistically update the chat history cache
-      dispatch(
-        chatApi.util.updateQueryData('getChatHistory', message.matchId, (draft) => {
-          if (!draft || !draft.data) return;
-          // Check if message already exists to prevent duplicates
-          const exists = draft.data.find((m) => m._id === message._id);
-          if (!exists) {
-            draft.data.push(message);
-          }
-        })
-      );
+      if (message.matchId) {
+        dispatch(
+          chatApi.util.updateQueryData('getChatHistory', message.matchId, (draft) => {
+            if (!draft || !draft.data) return;
+            // Check if message already exists to prevent duplicates
+            const exists = draft.data.find((m) => m._id === message._id);
+            if (!exists) {
+              draft.data.push(message);
+            }
+          })
+        );
+      }
       
       // Also invalidate Match list to update lastMessage and unread counts
       dispatch(chatApi.util.invalidateTags(['Match']));
 
       // Only show toast if we are NOT currently in that chat
-      // We can get activeChatId from state, but inside this closure we need the latest.
-      // A better way is to check the current URL or have activeChatId in a ref, 
-      // but for now, simple toast is fine.
       if (message.senderId !== user?.id && message.senderId !== user?._id) {
         toast('New message received', {
           icon: '💬',
