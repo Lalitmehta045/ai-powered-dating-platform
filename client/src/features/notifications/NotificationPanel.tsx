@@ -124,11 +124,18 @@ export const NotificationPanel = () => {
               initial={{ opacity: 0, y: 10, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 10, scale: 0.95 }}
-              className="absolute -right-12 sm:right-0 mt-4 w-[calc(100vw-32px)] sm:w-80 glass-card rounded-2xl overflow-hidden z-50 border border-border shadow-2xl"
+              className="fixed inset-x-4 top-20 sm:absolute sm:inset-auto sm:right-0 sm:top-full sm:mt-4 sm:w-80 glass-card rounded-2xl overflow-hidden z-50 border border-border shadow-2xl"
             >
               <div className="p-4 border-b border-border/50 flex justify-between items-center bg-card/80">
                 <h3 className="font-bold text-white">Notifications</h3>
-                <button onClick={() => refetch()} className="text-xs text-primary hover:text-primary-hover">Refresh</button>
+                <div className="flex items-center gap-4">
+                  <button onClick={() => refetch()} className="text-xs text-primary hover:text-primary-hover font-medium">Refresh</button>
+                  <button onClick={() => setIsOpen(false)} className="sm:hidden p-1 hover:bg-white/10 rounded-full">
+                    <svg className="w-5 h-5 text-text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
               </div>
               
               <div className="max-h-[400px] overflow-y-auto scrollbar-hide">
