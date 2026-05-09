@@ -21,7 +21,7 @@ export const getChatHistory = asyncHandler(
   async (req: AuthRequest, res: Response) => {
     if (!req.userId) throw AppError.unauthorized();
 
-    const { matchId } = req.params;
+    const matchId = String(req.params.matchId);
     const page = Number(req.query.page) || undefined;
     const limit = Number(req.query.limit) || undefined;
 
@@ -44,7 +44,7 @@ export const sendMessage = asyncHandler(
   async (req: AuthRequest, res: Response) => {
     if (!req.userId) throw AppError.unauthorized();
 
-    const { matchId } = req.params;
+    const matchId = String(req.params.matchId);
     const { content } = req.body;
 
     const message = await chatService.sendMessage(req.userId, matchId, content);
@@ -89,7 +89,7 @@ export const markAsRead = asyncHandler(
   async (req: AuthRequest, res: Response) => {
     if (!req.userId) throw AppError.unauthorized();
 
-    const { matchId } = req.params;
+    const matchId = String(req.params.matchId);
 
     const result = await chatService.markAsRead(req.userId, matchId);
 

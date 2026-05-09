@@ -34,7 +34,7 @@ export class ApiResponse {
     res: Response,
     statusCode: number,
     message: string,
-    data?: Record<string, unknown>
+    data?: any
   ) {
     return res.status(statusCode).json({
       success: true,
@@ -46,7 +46,7 @@ export class ApiResponse {
   static created(
     res: Response,
     message: string,
-    data?: Record<string, unknown>
+    data?: any
   ) {
     return ApiResponse.success(res, 201, message, data);
   }
@@ -54,7 +54,7 @@ export class ApiResponse {
   static ok(
     res: Response,
     message: string,
-    data?: Record<string, unknown>
+    data?: any
   ) {
     return ApiResponse.success(res, 200, message, data);
   }
