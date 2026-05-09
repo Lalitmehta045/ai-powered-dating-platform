@@ -79,9 +79,9 @@ export const Settings = () => {
     {
       title: 'Support',
       items: [
-        { icon: null, label: 'Help Center', value: '' },
-        { icon: null, label: 'Safety Guidelines', value: '' },
-        { icon: null, label: 'Terms of Service', value: '' },
+        { icon: null, label: 'Help Center', value: '', onClick: () => toast.error('Help Center coming soon!') },
+        { icon: null, label: 'Safety Guidelines', value: '', onClick: () => navigate('/settings/safety') },
+        { icon: null, label: 'Terms of Service', value: '', onClick: () => navigate('/settings/terms') },
       ]
     }
   ];

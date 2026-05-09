@@ -18,6 +18,8 @@ const Chat = React.lazy(() => import('../pages/Chat').then(module => ({ default:
 const Profile = React.lazy(() => import('../pages/Profile').then(module => ({ default: module.Profile })));
 const Premium = React.lazy(() => import('../pages/Premium').then(module => ({ default: module.Premium })));
 const Settings = React.lazy(() => import('../pages/Settings').then(module => ({ default: module.Settings })));
+const SafetyGuidelines = React.lazy(() => import('../pages/SafetyGuidelines').then(module => ({ default: module.SafetyGuidelines })));
+const TermsOfService = React.lazy(() => import('../pages/TermsOfService').then(module => ({ default: module.TermsOfService })));
 import { useDispatch } from 'react-redux';
 import { logout } from '../store/slices/authSlice';
 import { socketClient } from '../socket/socketClient';
@@ -46,6 +48,8 @@ export const AppRoutes = () => {
           <Route path="/profile" element={<Profile />} />
           <Route path="/premium" element={<Premium />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/settings/safety" element={<SafetyGuidelines />} />
+          <Route path="/settings/terms" element={<TermsOfService />} />
         </Route>
       </Route>
 
