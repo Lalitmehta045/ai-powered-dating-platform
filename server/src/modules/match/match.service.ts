@@ -12,7 +12,7 @@ import { logger } from "../../logger/logger";
 
 // ── Constants ────────────────────────────────────────────────
 
-const DAILY_SWIPE_LIMIT = 10;
+const DAILY_SWIPE_LIMIT = 15;
 
 // ── Private helpers ──────────────────────────────────────────
 
