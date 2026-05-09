@@ -102,9 +102,69 @@ export const UserManagement = () => {
         </div>
       </div>
 
-      {/* Table Content */}
+      {/* User List - Responsive Layout */}
       <div className="bg-surface border border-border rounded-2xl overflow-hidden">
-        <div className="overflow-x-auto">
+        {/* Mobile Card View */}
+        <div className="block lg:hidden divide-y divide-border">
+          {isLoading ? (
+            <div className="p-8 text-center"><Loader2 className="w-8 h-8 text-primary animate-spin mx-auto" /></div>
+          ) : data?.users.map((user: any) => (
+            <div key={user.id} className="p-4 space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center border border-primary/20 shrink-0">
+                    {user.photos?.[0] ? (
+                      <img src={user.photos[0]} className="w-full h-full object-cover rounded-xl" />
+                    ) : (
+                      <span className="text-primary font-bold">{user.name.charAt(0)}</span>
+                    )}
+                  </div>
+                  <div className="truncate max-w-[150px]">
+                    <p className="font-bold text-text-primary truncate">{user.name}</p>
+                    <p className="text-xs text-text-muted truncate">{user.email}</p>
+                  </div>
+                </div>
+                <span className={`px-2 py-0.5 rounded-full text-[10px] font-black uppercase ${
+                  user.status === 'active' ? 'bg-green-500/10 text-green-500 border border-green-500/20' :
+                  user.status === 'suspended' ? 'bg-amber-500/10 text-amber-500 border border-amber-500/20' :
+                  'bg-red-500/10 text-red-500 border border-red-500/20'
+                }`}>
+                  {user.status}
+                </span>
+              </div>
+
+              <div className="flex items-center justify-between pt-2 border-t border-border/50">
+                <div className="flex items-center space-x-2">
+                  <Zap className={`w-4 h-4 ${user.isPremium ? 'text-amber-500' : 'text-text-muted'}`} />
+                  <span className="text-xs font-bold uppercase text-text-muted">{user.isPremium ? 'Premium' : 'Free'}</span>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <button 
+                    onClick={() => handlePremiumToggle(user.id, user.isPremium)}
+                    className="p-2 bg-background-alt border border-border rounded-lg text-text-muted hover:text-amber-500 transition-all"
+                  >
+                    <Zap className="w-4 h-4" />
+                  </button>
+                  <button 
+                    onClick={() => handleStatusChange(user.id, user.status === 'active' ? 'suspended' : 'active')}
+                    className="p-2 bg-background-alt border border-border rounded-lg text-text-muted hover:text-amber-500 transition-all"
+                  >
+                    <Clock className="w-4 h-4" />
+                  </button>
+                  <button 
+                     onClick={() => handleStatusChange(user.id, 'banned')}
+                     className="p-2 bg-background-alt border border-border rounded-lg text-text-muted hover:text-red-500 transition-all"
+                  >
+                    <UserX className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Desktop Table View */}
+        <div className="hidden lg:block overflow-x-auto">
           <table className="w-full text-left">
             <thead>
               <tr className="bg-background-alt/50 border-b border-border">
@@ -140,10 +200,10 @@ export const UserManagement = () => {
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <span className={`px-2.5 py-1 rounded-full text-xs font-bold capitalize ${
-                      user.status === 'active' ? 'bg-green-500/10 text-green-500' :
-                      user.status === 'suspended' ? 'bg-amber-500/10 text-amber-500' :
-                      'bg-red-500/10 text-red-500'
+                    <span className={`px-2.5 py-1 rounded-full text-xs font-bold capitalize border ${
+                      user.status === 'active' ? 'bg-green-500/10 text-green-500 border-green-500/20' :
+                      user.status === 'suspended' ? 'bg-amber-500/10 text-amber-500 border-amber-500/20' :
+                      'bg-red-500/10 text-red-500 border-red-500/20'
                     }`}>
                       {user.status}
                     </span>

@@ -136,19 +136,61 @@ export const PremiumManagement = () => {
         </div>
       </div>
 
-      {/* Premium Users Table */}
+      {/* Premium Users - Responsive Layout */}
       <div className="bg-surface border border-border rounded-2xl overflow-hidden">
         <div className="p-6 border-b border-border flex items-center justify-between">
-          <h3 className="text-lg font-bold">Premium Subscriber Directory</h3>
+          <h3 className="text-lg font-bold">Subscriber Directory</h3>
         </div>
-        <div className="overflow-x-auto">
+
+        {/* Mobile Card View */}
+        <div className="block lg:hidden divide-y divide-border">
+          {isUsersLoading ? (
+            <div className="p-8 text-center"><Loader2 className="w-8 h-8 text-primary animate-spin mx-auto" /></div>
+          ) : usersData?.users.map((user: any) => (
+            <div key={user.id} className="p-4 space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20">
+                    {user.photos?.[0] ? (
+                      <img src={user.photos[0]} className="w-full h-full object-cover rounded-xl" />
+                    ) : (
+                      <span className="text-primary font-bold">{user.name.charAt(0)}</span>
+                    )}
+                  </div>
+                  <div>
+                    <p className="font-bold text-text-primary text-sm">{user.name}</p>
+                    <p className="text-xs text-text-muted">{user.email}</p>
+                  </div>
+                </div>
+                <span className={`px-2 py-0.5 rounded-full text-[10px] font-black uppercase ${
+                  user.subscriptionType === 'yearly' ? 'bg-amber-500/10 text-amber-500 border border-amber-500/20' : 'bg-blue-500/10 text-blue-500 border border-blue-500/20'
+                }`}>
+                  {user.subscriptionType}
+                </span>
+              </div>
+              <div className="flex items-center justify-between pt-2">
+                <div className="flex flex-col">
+                  <span className="text-[10px] text-text-muted font-bold uppercase">Expires On</span>
+                  <span className="text-xs font-semibold">{new Date(user.premiumExpiresAt).toLocaleDateString()}</span>
+                </div>
+                <button className="flex items-center space-x-1 px-3 py-1.5 bg-background-alt border border-border rounded-lg text-xs font-bold hover:bg-primary/10 hover:text-primary transition-all">
+                  <ExternalLink className="w-3.5 h-3.5" />
+                  <span>Manage</span>
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Desktop Table View */}
+        <div className="hidden lg:block overflow-x-auto">
           <table className="w-full text-left">
             <thead>
               <tr className="bg-background-alt/50 border-b border-border">
-                <th className="px-6 py-4 text-xs font-bold text-text-muted uppercase">Subscriber</th>
-                <th className="px-6 py-4 text-xs font-bold text-text-muted uppercase">Plan Type</th>
-                <th className="px-6 py-4 text-xs font-bold text-text-muted uppercase">Expiry Date</th>
-                <th className="px-6 py-4 text-xs font-bold text-text-muted uppercase text-right">Actions</th>
+                <th className="px-6 py-4 text-xs font-bold text-text-muted uppercase tracking-wider">Subscriber</th>
+                <th className="px-6 py-4 text-xs font-bold text-text-muted uppercase tracking-wider">Plan Type</th>
+                <th className="px-6 py-4 text-xs font-bold text-text-muted uppercase tracking-wider">Expiry Date</th>
+                <th className="px-6 py-4 text-xs font-bold text-text-muted uppercase tracking-wider text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
@@ -176,8 +218,8 @@ export const PremiumManagement = () => {
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <span className={`px-2.5 py-1 rounded-full text-xs font-bold uppercase ${
-                      user.subscriptionType === 'yearly' ? 'bg-amber-500/10 text-amber-500' : 'bg-blue-500/10 text-blue-500'
+                    <span className={`px-2.5 py-1 rounded-full text-xs font-bold uppercase border ${
+                      user.subscriptionType === 'yearly' ? 'bg-amber-500/10 text-amber-500 border-amber-500/20' : 'bg-blue-500/10 text-blue-500 border-blue-500/20'
                     }`}>
                       {user.subscriptionType}
                     </span>

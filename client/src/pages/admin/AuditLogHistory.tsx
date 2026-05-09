@@ -63,9 +63,45 @@ export const AuditLogHistory = () => {
         </div>
       </div>
 
-      {/* Audit Table */}
+      {/* Audit Log - Responsive Layout */}
       <div className="bg-surface border border-border rounded-2xl overflow-hidden">
-        <div className="overflow-x-auto">
+        {/* Mobile View */}
+        <div className="block lg:hidden divide-y divide-border">
+          {isLoading ? (
+            <div className="p-8 text-center text-text-muted animate-pulse font-bold uppercase text-xs">Scanning logs...</div>
+          ) : data?.logs.map((log: any) => (
+            <div key={log._id} className="p-4 space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center border border-primary/20">
+                    <User className="w-4 h-4 text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-text-primary">{log.adminId?.name}</p>
+                    <p className="text-[10px] text-text-muted font-black uppercase">{log.adminId?.role}</p>
+                  </div>
+                </div>
+                <span className={`px-2 py-0.5 rounded-lg text-[10px] font-black uppercase border ${getActionColor(log.action)}`}>
+                  {log.action}
+                </span>
+              </div>
+              
+              <div className="bg-background-alt/50 border border-border p-3 rounded-xl flex items-center justify-between">
+                <div className="flex flex-col">
+                  <span className="text-[10px] text-text-muted font-bold uppercase">Target</span>
+                  <span className="text-xs font-mono">{log.targetType}: {log.targetId?.slice(-6) || 'N/A'}</span>
+                </div>
+                <div className="text-right">
+                  <span className="text-[10px] text-text-muted font-bold uppercase block">Time</span>
+                  <span className="text-xs font-semibold">{new Date(log.timestamp).toLocaleTimeString()}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Desktop Table View */}
+        <div className="hidden lg:block overflow-x-auto">
           <table className="w-full text-left">
             <thead>
               <tr className="bg-background-alt/50 border-b border-border">
