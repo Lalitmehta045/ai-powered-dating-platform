@@ -18,70 +18,78 @@ export const ProfileViewModal: React.FC<ProfileViewModalProps> = ({ isOpen, onCl
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+        <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/90 backdrop-blur-md"
           />
           
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="relative w-full max-w-lg bg-card rounded-3xl overflow-hidden shadow-2xl border border-border/50 max-h-[90vh] flex flex-col"
+            initial={{ opacity: 0, y: "100%" }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: "100%" }}
+            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            className="relative w-full max-w-lg bg-[#121217] rounded-t-[2.5rem] sm:rounded-[2.5rem] overflow-hidden shadow-[0_-20px_50px_rgba(0,0,0,0.5)] border-t border-white/10 sm:border border-white/10 h-[92vh] sm:h-auto sm:max-h-[85vh] flex flex-col"
           >
-            {/* Close Button */}
-            <button 
-              onClick={onClose}
-              className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-black/20 backdrop-blur-md flex items-center justify-center text-white hover:bg-black/40 transition-colors"
-            >
-              <X className="w-6 h-6" />
-            </button>
+            {/* Elegant Close Bar (Mobile) */}
+            <div className="sm:hidden w-full flex justify-center pt-3 pb-1">
+              <div className="w-12 h-1.5 bg-white/20 rounded-full" />
+            </div>
 
-            <div className="overflow-y-auto scrollbar-hide">
-              {/* Image Section */}
-              <div className="relative aspect-[3/4] w-full">
+            <div className="overflow-y-auto scrollbar-hide flex-1">
+              {/* Premium Hero Section */}
+              <div className="relative aspect-[4/5] sm:aspect-square w-full">
                 <img 
                   src={user.profileImage || defaultImage} 
                   alt={user.name} 
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent" />
                 
-                <div className="absolute bottom-6 left-6 right-6">
-                  <h2 className="text-4xl font-bold text-white flex items-center gap-3">
-                    {user.name} <span className="font-light text-3xl">{user.age || 24}</span>
-                    {user.isPremium && <Sparkles className="w-6 h-6 text-secondary animate-pulse" />}
-                  </h2>
-                  <div className="flex items-center gap-2 text-gray-300 mt-2">
-                    <MapPin className="w-4 h-4" />
-                    <span className="text-sm">Matched with you ❤️</span>
+                {/* Elite Overlay Gradient */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#121217] via-transparent to-black/30" />
+                
+                {/* Back/Close Button */}
+                <button 
+                  onClick={onClose}
+                  className="absolute top-6 left-6 z-20 w-11 h-11 rounded-full glass flex items-center justify-center text-white hover:bg-white/20 transition-all border border-white/20 shadow-xl"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+
+                <div className="absolute bottom-8 left-8 right-8">
+                  <div className="inline-flex items-center gap-2 glass px-3 py-1.5 rounded-full border border-secondary/30 mb-4 shadow-lg">
+                    <Heart className="w-4 h-4 text-secondary fill-secondary" />
+                    <span className="text-white text-xs font-bold uppercase tracking-wider">Mutual Match</span>
                   </div>
+                  
+                  <h2 className="text-5xl font-black text-white flex items-center gap-3 drop-shadow-2xl">
+                    {user.name} <span className="font-light text-4xl opacity-80">{user.age || 24}</span>
+                  </h2>
                 </div>
               </div>
 
-              {/* Content Section */}
-              <div className="p-6 space-y-6">
+              {/* Refined Content Section */}
+              <div className="p-8 space-y-8">
                 {user.bio && (
-                  <div>
-                    <h3 className="text-sm font-bold text-text-secondary uppercase tracking-wider mb-2">About</h3>
-                    <p className="text-white text-base leading-relaxed">
+                  <div className="space-y-3">
+                    <h3 className="text-[11px] font-black text-primary uppercase tracking-[0.2em] opacity-80">About</h3>
+                    <p className="text-gray-200 text-lg leading-relaxed font-medium">
                       {user.bio}
                     </p>
                   </div>
                 )}
 
                 {user.interests && user.interests.length > 0 && (
-                  <div>
-                    <h3 className="text-sm font-bold text-text-secondary uppercase tracking-wider mb-3">Interests</h3>
-                    <div className="flex flex-wrap gap-2">
+                  <div className="space-y-4">
+                    <h3 className="text-[11px] font-black text-primary uppercase tracking-[0.2em] opacity-80">Interests</h3>
+                    <div className="flex flex-wrap gap-2.5">
                       {user.interests.map((interest, idx) => (
                         <span 
                           key={idx} 
-                          className="px-4 py-2 rounded-full text-sm font-medium glass border border-border text-white"
+                          className="px-5 py-2.5 rounded-2xl text-sm font-bold bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-colors"
                         >
                           {interest}
                         </span>
@@ -90,8 +98,23 @@ export const ProfileViewModal: React.FC<ProfileViewModalProps> = ({ isOpen, onCl
                   </div>
                 )}
 
-                <div className="pt-4 flex gap-4">
-                  <Button variant="primary" className="flex-1" onClick={onClose}>
+                {/* Compatibility Info */}
+                <div className="glass p-6 rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-transparent">
+                  <div className="flex items-center gap-3 mb-2">
+                    <Sparkles className="w-5 h-5 text-secondary" />
+                    <span className="text-white font-bold">AI Insight</span>
+                  </div>
+                  <p className="text-gray-400 text-sm leading-relaxed">
+                    You both share interests in {user.interests?.slice(0, 2).join(' and ') || 'creative fields'}. Great potential for deep conversation!
+                  </p>
+                </div>
+
+                <div className="pt-4 pb-10 sm:pb-4">
+                  <Button 
+                    variant="primary" 
+                    className="w-full h-16 rounded-2xl text-lg font-bold shadow-[0_10px_20px_rgba(255,51,102,0.3)] hover:shadow-none transition-all" 
+                    onClick={onClose}
+                  >
                     Back to Chat
                   </Button>
                 </div>
