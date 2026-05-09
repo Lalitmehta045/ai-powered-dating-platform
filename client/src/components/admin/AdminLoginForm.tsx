@@ -17,7 +17,10 @@ export const AdminLoginForm = () => {
     dispatch(loginStart());
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/v1/admin/login`, {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+      const endpoint = apiUrl.endsWith('/api/v1') ? '/admin/login' : '/api/v1/admin/login';
+      
+      const response = await fetch(`${apiUrl}${endpoint}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
