@@ -199,5 +199,5 @@ CLOUDINARY_NAME=your_cloud_name
 ---
 
 ## 👤 Author
-**Your Name**
-- [GitHub](https://github.com/yourusername) | [LinkedIn](https://linkedin.com/in/yourprofile)
+**Lalit Mehta**
+- [GitHub](https://github.com/Lalitmehta045) | [LinkedIn](https://linkedin.com/in/lalitmehta45)
