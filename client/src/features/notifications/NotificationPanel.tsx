@@ -38,7 +38,7 @@ export const NotificationPanel = () => {
                   />
                 </div>
                 <div className="ml-3 flex-1">
-                  <p className="text-sm font-bold text-white">
+                  <p className="text-sm font-bold text-text-primary">
                     {newNotif.type === 'new_match' ? 'New Match! ❤️' : 'New Interaction ✨'}
                   </p>
                   <p className="mt-1 text-sm text-text-secondary">
@@ -106,11 +106,11 @@ export const NotificationPanel = () => {
     <div className="relative">
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="relative w-10 h-10 rounded-full glass flex items-center justify-center cursor-pointer hover:bg-white/10 transition-colors"
+        className="relative w-10 h-10 rounded-full glass flex items-center justify-center cursor-pointer hover:bg-hover transition-colors"
       >
         <Bell className="w-5 h-5 text-text-primary" />
         {unreadCount > 0 && (
-          <div className="absolute -top-1 -right-1 w-5 h-5 bg-primary rounded-full border-2 border-background flex items-center justify-center text-[10px] font-bold text-white animate-pulse">
+          <div className="absolute -top-1 -right-1 w-5 h-5 bg-primary rounded-full border-2 border-background flex items-center justify-center text-[10px] font-bold text-text-primary animate-pulse">
             {unreadCount > 9 ? '9+' : unreadCount}
           </div>
         )}
@@ -127,10 +127,10 @@ export const NotificationPanel = () => {
               className="fixed inset-x-4 top-20 sm:absolute sm:inset-auto sm:right-0 sm:top-full sm:mt-4 sm:w-80 glass-card rounded-2xl overflow-hidden z-50 border border-border shadow-2xl"
             >
               <div className="p-4 border-b border-border/50 flex justify-between items-center bg-card/80">
-                <h3 className="font-bold text-white">Notifications</h3>
+                <h3 className="font-bold text-text-primary">Notifications</h3>
                 <div className="flex items-center gap-4">
                   <button onClick={() => refetch()} className="text-xs text-primary hover:text-primary-hover font-medium">Refresh</button>
-                  <button onClick={() => setIsOpen(false)} className="sm:hidden p-1 hover:bg-white/10 rounded-full">
+                  <button onClick={() => setIsOpen(false)} className="sm:hidden p-1 hover:bg-hover rounded-full">
                     <svg className="w-5 h-5 text-text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                     </svg>
@@ -148,7 +148,7 @@ export const NotificationPanel = () => {
                     <div 
                       key={notif._id} 
                       onClick={() => handleNotificationClick(notif)}
-                      className={`p-4 border-b border-border/30 transition-colors cursor-pointer flex gap-3 ${!notif.isRead ? 'bg-primary/5 hover:bg-primary/10' : 'hover:bg-white/5'}`}
+                      className={`p-4 border-b border-border/30 transition-colors cursor-pointer flex gap-3 ${!notif.isRead ? 'bg-primary/5 hover:bg-primary/10' : 'hover:bg-hover/50'}`}
                     >
                       <div className="relative flex-shrink-0">
                         <img 
@@ -161,7 +161,7 @@ export const NotificationPanel = () => {
                         </div>
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className={`text-sm mb-1 line-clamp-2 ${notif.isRead ? 'text-text-secondary' : 'text-white font-medium'}`}>
+                        <p className={`text-sm mb-1 line-clamp-2 ${notif.isRead ? 'text-text-secondary' : 'text-text-primary font-medium'}`}>
                           {notif.type === 'new_match' && `You and ${(notif.sender as any)?.name || 'someone'} matched!`}
                           {notif.type === 'profile_like' && `${(notif.sender as any)?.name || 'Someone'} liked your profile.`}
                           {notif.type === 'new_message' && `Message from ${(notif.sender as any)?.name || 'someone'}`}

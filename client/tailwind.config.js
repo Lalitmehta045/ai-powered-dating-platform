@@ -21,6 +21,7 @@ export default {
         },
         success: "var(--success)",
         danger: "var(--danger)",
+        hover: "var(--hover-bg)",
         text: {
           primary: "var(--text-primary)",
           secondary: "var(--text-secondary)",

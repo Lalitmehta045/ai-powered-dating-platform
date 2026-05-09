@@ -89,10 +89,10 @@ export const Settings = () => {
   return (
     <div className="flex-1 w-full max-w-2xl mx-auto p-4 sm:p-8 flex flex-col pt-safe-top pb-safe-bottom">
       <header className="flex items-center gap-4 mb-8">
-        <Link to="/profile" className="p-2 -ml-2 rounded-full hover:bg-white/10 text-text-primary transition-colors">
+        <Link to="/profile" className="p-2 -ml-2 rounded-full hover:bg-hover text-text-primary transition-colors">
           <ArrowLeft className="w-6 h-6" />
         </Link>
-        <h1 className="text-2xl font-bold font-accent text-white">Settings</h1>
+        <h1 className="text-2xl font-bold font-accent text-text-primary">Settings</h1>
       </header>
 
       <div className="space-y-8">
@@ -106,15 +106,15 @@ export const Settings = () => {
                 <div 
                   key={itemIdx}
                   onClick={item.onClick}
-                  className="flex items-center justify-between p-4 hover:bg-white/5 cursor-pointer transition-colors border-b border-border/30 last:border-0"
+                  className="flex items-center justify-between p-4 hover:bg-hover/50 cursor-pointer transition-colors border-b border-border/30 last:border-0"
                 >
                   <div className="flex items-center gap-3">
                     {item.icon && <item.icon className="w-5 h-5 text-text-primary" />}
-                    <span className="text-white font-medium">{item.label}</span>
+                    <span className="text-text-primary font-medium">{item.label}</span>
                   </div>
                   <div className="flex items-center gap-3">
                     {item.isToggle ? (
-                      <div className={`w-11 h-6 rounded-full transition-colors relative ${item.active ? 'bg-primary' : 'bg-white/10'}`}>
+                      <div className={`w-11 h-6 rounded-full transition-colors relative ${item.active ? 'bg-primary' : 'bg-hover'}`}>
                         <motion.div 
                           animate={{ x: item.active ? 22 : 2 }}
                           className="absolute top-1 w-4 h-4 rounded-full bg-white shadow-sm"
@@ -141,7 +141,7 @@ export const Settings = () => {
           <div className="glass rounded-2xl overflow-hidden border border-border/50">
             <button 
               onClick={handleLogout}
-              className="w-full flex items-center gap-3 p-4 hover:bg-white/5 cursor-pointer transition-colors border-b border-border/30 text-white"
+              className="w-full flex items-center gap-3 p-4 hover:bg-hover/50 cursor-pointer transition-colors border-b border-border/30 text-text-primary"
             >
               <LogOut className="w-5 h-5" />
               <span className="font-medium">Log Out</span>

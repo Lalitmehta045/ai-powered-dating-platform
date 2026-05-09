@@ -30,7 +30,7 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match, currentUser }) => {
       <motion.div
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
-        className="glass-card rounded-2xl p-4 flex items-center gap-4 cursor-pointer hover:bg-white/5 transition-colors border border-border/50 hover:border-primary/30"
+        className="glass-card rounded-2xl p-4 flex items-center gap-4 cursor-pointer hover:bg-hover/50 transition-colors border border-border/50 hover:border-primary/30"
       >
         <div className="relative">
           <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-transparent">
@@ -46,19 +46,19 @@ export const MatchCard: React.FC<MatchCardProps> = ({ match, currentUser }) => {
         </div>
 
         <div className="flex-1 min-w-0">
-          <h3 className="text-white font-semibold truncate text-lg">
+          <h3 className="text-text-primary font-semibold truncate text-lg">
             {otherUser.name}
           </h3>
           <p className={cn(
             "text-sm truncate",
-            match.unreadCount ? "text-white font-medium" : "text-text-secondary"
+            match.unreadCount ? "text-text-primary font-medium" : "text-text-secondary"
           )}>
             {match.lastMessage ? match.lastMessage.content : "Start a conversation!"}
           </p>
         </div>
 
         {match.unreadCount && match.unreadCount > 0 ? (
-          <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center text-xs font-bold text-white shadow-lg shadow-primary/40">
+          <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center text-xs font-bold text-text-primary shadow-lg shadow-primary/40">
             {match.unreadCount}
           </div>
         ) : null}

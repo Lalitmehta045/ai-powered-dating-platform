@@ -69,15 +69,15 @@ export const Discover = () => {
     <div className="min-h-screen bg-background flex flex-col pt-safe-top overflow-hidden">
       {/* Header */}
       <header className="flex-shrink-0 p-4 sm:p-6 flex items-center justify-between z-10 max-w-lg mx-auto w-full">
-        <h1 className="text-2xl font-bold font-accent text-white">Discover</h1>
+        <h1 className="text-2xl font-bold font-accent text-text-primary">Discover</h1>
         <div className="flex gap-3">
           <NotificationPanel />
           <Link to="/matches">
-            <div className="w-10 h-10 rounded-full glass flex items-center justify-center cursor-pointer hover:bg-white/10 transition-colors">
+            <div className="w-10 h-10 rounded-full glass flex items-center justify-center cursor-pointer hover:bg-hover transition-colors">
               <MessageSquareHeart className="w-5 h-5 text-text-primary" />
             </div>
           </Link>
-          <div className="w-10 h-10 rounded-full glass flex items-center justify-center cursor-pointer hover:bg-white/10 transition-colors">
+          <div className="w-10 h-10 rounded-full glass flex items-center justify-center cursor-pointer hover:bg-hover transition-colors">
             <Filter className="w-5 h-5 text-text-primary" />
           </div>
         </div>
@@ -103,7 +103,7 @@ export const Discover = () => {
               <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mb-6">
                 <Sparkles className="w-10 h-10 text-primary" />
               </div>
-              <h3 className="text-2xl font-bold text-white mb-2">You're all caught up!</h3>
+              <h3 className="text-2xl font-bold text-text-primary mb-2">You're all caught up!</h3>
               <p className="text-text-secondary mb-8">
                 There are no more new profiles in your area. Check back later or expand your search preferences.
               </p>

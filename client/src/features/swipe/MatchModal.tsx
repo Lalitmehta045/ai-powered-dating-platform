@@ -54,7 +54,7 @@ export const MatchModal: React.FC<MatchModalProps> = ({ isOpen, onClose, matched
             </h2>
 
             <p className="text-text-primary text-lg mb-8">
-              You and <span className="font-bold text-white">{matchedUser.name}</span> liked each other.
+              You and <span className="font-bold text-text-primary">{matchedUser.name}</span> liked each other.
             </p>
 
             <div className="flex items-center justify-center gap-4 mb-12 relative">
@@ -86,7 +86,7 @@ export const MatchModal: React.FC<MatchModalProps> = ({ isOpen, onClose, matched
                 <MessageCircle className="w-5 h-5 mr-2" />
                 Say Hello
               </Button>
-              <Button variant="ghost" size="lg" className="w-full max-w-xs rounded-full text-text-secondary hover:text-white" onClick={onClose}>
+              <Button variant="ghost" size="lg" className="w-full max-w-xs rounded-full text-text-secondary hover:text-text-primary" onClick={onClose}>
                 Keep Swiping
               </Button>
             </div>

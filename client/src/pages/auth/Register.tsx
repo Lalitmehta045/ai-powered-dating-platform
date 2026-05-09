@@ -48,7 +48,7 @@ export const Register = () => {
 
       <Link to="/" className="mb-8 flex items-center gap-2 group z-10">
         <Heart className="w-10 h-10 text-primary fill-primary group-hover:scale-110 transition-transform" />
-        <span className="text-3xl font-bold font-accent text-white">HeartSync</span>
+        <span className="text-3xl font-bold font-accent text-text-primary">HeartSync</span>
       </Link>
 
       <motion.div
@@ -59,7 +59,7 @@ export const Register = () => {
       >
         <GlassCard>
           <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-white mb-2">Create an account</h2>
+            <h2 className="text-2xl font-bold text-text-primary mb-2">Create an account</h2>
             <p className="text-text-secondary">Join HeartSync to find your perfect match</p>
           </div>
 
@@ -98,7 +98,7 @@ export const Register = () => {
 
           <div className="mt-8 text-center text-sm text-text-secondary">
             Already have an account?{' '}
-            <Link to="/login" className="font-medium text-white hover:text-primary transition-colors">
+            <Link to="/login" className="font-medium text-text-primary hover:text-primary transition-colors">
               Sign in
             </Link>
           </div>

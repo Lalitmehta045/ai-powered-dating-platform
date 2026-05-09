@@ -23,9 +23,9 @@ export const Profile = () => {
   return (
     <div className="flex-1 w-full max-w-2xl mx-auto p-4 sm:p-8 flex flex-col pt-safe-top pb-safe-bottom">
       <div className="flex items-center justify-between mb-8">
-        <h1 className="text-3xl font-bold font-accent text-white">Profile</h1>
+        <h1 className="text-3xl font-bold font-accent text-text-primary">Profile</h1>
         <Link to="/settings">
-          <div className="w-10 h-10 rounded-full glass flex items-center justify-center hover:bg-white/10 transition-colors">
+          <div className="w-10 h-10 rounded-full glass flex items-center justify-center hover:bg-hover transition-colors">
             <SettingsIcon className="w-5 h-5 text-text-primary" />
           </div>
         </Link>
@@ -54,7 +54,7 @@ export const Profile = () => {
               </div>
               <button 
                 onClick={() => setIsEditModalOpen(true)}
-                className="absolute bottom-0 right-0 w-10 h-10 rounded-full bg-primary flex items-center justify-center border-2 border-card shadow-lg hover:bg-primary-hover transition-colors text-white"
+                className="absolute bottom-0 right-0 w-10 h-10 rounded-full bg-primary flex items-center justify-center border-2 border-card shadow-lg hover:bg-primary-hover transition-colors text-text-primary"
               >
                 <Edit3 className="w-5 h-5" />
               </button>
@@ -62,7 +62,7 @@ export const Profile = () => {
           </div>
 
           <div className="mb-6">
-            <h2 className="text-3xl font-bold text-white flex items-center gap-2">
+            <h2 className="text-3xl font-bold text-text-primary flex items-center gap-2">
               {user.name} <span className="font-light text-2xl text-text-primary">{user.age || ''}</span>
               {user.isPremium && <Sparkles className="w-5 h-5 text-secondary" />}
             </h2>
@@ -92,7 +92,7 @@ export const Profile = () => {
           <div className="space-y-6">
             <div>
               <h3 className="text-sm font-bold text-text-secondary uppercase tracking-wider mb-2">About Me</h3>
-              <p className="text-white text-base leading-relaxed">
+              <p className="text-text-primary text-base leading-relaxed">
                 {user.bio || "No bio added yet. Tell people about yourself!"}
               </p>
             </div>
@@ -102,7 +102,7 @@ export const Profile = () => {
               <div className="flex flex-wrap gap-2">
                 {user.interests && user.interests.length > 0 ? (
                   user.interests.map((interest, idx) => (
-                    <span key={idx} className="px-4 py-2 rounded-full text-sm font-medium glass border border-border text-white shadow-sm">
+                    <span key={idx} className="px-4 py-2 rounded-full text-sm font-medium glass border border-border text-text-primary shadow-sm">
                       {interest}
                     </span>
                   ))

@@ -10,11 +10,11 @@ export const Landing = () => {
       <nav className="absolute top-0 w-full z-50 p-6 flex justify-between items-center max-w-7xl mx-auto left-0 right-0">
         <div className="flex items-center gap-2">
           <Heart className="w-8 h-8 text-primary fill-primary" />
-          <span className="text-xl font-bold font-accent tracking-wide text-white">HeartSync</span>
+          <span className="text-xl font-bold font-accent tracking-wide text-text-primary">HeartSync</span>
         </div>
         <div className="flex items-center gap-4">
           <Link to="/login">
-            <Button variant="ghost" size="sm" className="hidden sm:inline-flex text-white font-medium">Sign in</Button>
+            <Button variant="ghost" size="sm" className="hidden sm:inline-flex text-text-primary font-medium">Sign in</Button>
           </Link>
           <Link to="/register">
             <Button variant="glass" size="sm">Get Started</Button>
@@ -43,7 +43,7 @@ export const Landing = () => {
           </motion.div>
 
           <motion.h1 
-            className="text-5xl md:text-7xl font-bold font-accent tracking-tight text-white mb-6 leading-tight"
+            className="text-5xl md:text-7xl font-bold font-accent tracking-tight text-text-primary mb-6 leading-tight"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
@@ -101,7 +101,7 @@ export const Landing = () => {
               <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center mb-6">
                 <Heart className="w-6 h-6 text-primary" />
               </div>
-              <h3 className="text-xl font-semibold text-white mb-3">Smart Matching</h3>
+              <h3 className="text-xl font-semibold text-text-primary mb-3">Smart Matching</h3>
               <p className="text-text-secondary">Our algorithm learns your preferences to find the most compatible partners.</p>
             </motion.div>
 
@@ -112,7 +112,7 @@ export const Landing = () => {
               <div className="w-12 h-12 rounded-xl bg-secondary/20 flex items-center justify-center mb-6">
                 <MessageCircle className="w-6 h-6 text-secondary" />
               </div>
-              <h3 className="text-xl font-semibold text-white mb-3">Real-time Chat</h3>
+              <h3 className="text-xl font-semibold text-text-primary mb-3">Real-time Chat</h3>
               <p className="text-text-secondary">Instant messaging with typing indicators and read receipts for seamless communication.</p>
             </motion.div>
 
@@ -123,7 +123,7 @@ export const Landing = () => {
               <div className="w-12 h-12 rounded-xl bg-success/20 flex items-center justify-center mb-6">
                 <Shield className="w-6 h-6 text-success" />
               </div>
-              <h3 className="text-xl font-semibold text-white mb-3">Safe & Secure</h3>
+              <h3 className="text-xl font-semibold text-text-primary mb-3">Safe & Secure</h3>
               <p className="text-text-secondary">Enterprise-grade security and strict moderation keeps our community safe.</p>
             </motion.div>
           </div>

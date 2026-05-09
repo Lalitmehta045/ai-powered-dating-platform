@@ -81,9 +81,9 @@ export const Premium = () => {
     <div className="flex-1 w-full max-w-4xl mx-auto p-4 sm:p-8 flex flex-col pt-safe-top pb-safe-bottom">
       <div className="text-center mb-10">
         <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center mx-auto mb-4 shadow-xl shadow-primary/20">
-          <Crown className="w-8 h-8 text-white" />
+          <Crown className="w-8 h-8 text-text-primary" />
         </div>
-        <h1 className="text-3xl sm:text-4xl font-bold font-accent text-white mb-3">
+        <h1 className="text-3xl sm:text-4xl font-bold font-accent text-text-primary mb-3">
           HeartSync <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Premium</span>
         </h1>
         <p className="text-text-secondary max-w-lg mx-auto">
@@ -98,11 +98,11 @@ export const Premium = () => {
           className="glass-card p-8 rounded-3xl text-center border border-primary/30 relative overflow-hidden mb-8"
         >
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-secondary" />
-          <h2 className="text-2xl font-bold text-white mb-2">You are Premium!</h2>
+          <h2 className="text-2xl font-bold text-text-primary mb-2">You are Premium!</h2>
           <p className="text-text-secondary mb-8">Enjoy all your exclusive benefits.</p>
 
           <div className="p-6 rounded-2xl glass border border-secondary/20 max-w-md mx-auto">
-            <h3 className="text-lg font-bold text-white mb-2 flex items-center justify-center gap-2">
+            <h3 className="text-lg font-bold text-text-primary mb-2 flex items-center justify-center gap-2">
               <Zap className="w-5 h-5 text-secondary" /> Profile Boost
             </h3>
             <p className="text-sm text-text-secondary mb-6">
@@ -122,7 +122,7 @@ export const Premium = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto w-full">
           {/* Features List */}
           <div className="glass p-6 sm:p-8 rounded-3xl border border-border">
-            <h3 className="text-xl font-bold text-white mb-6">Premium Benefits</h3>
+            <h3 className="text-xl font-bold text-text-primary mb-6">Premium Benefits</h3>
             <ul className="space-y-4">
               {[
                 { icon: Heart, text: 'Unlimited Likes' },
@@ -135,7 +135,7 @@ export const Premium = () => {
                   <div className="w-8 h-8 rounded-full bg-success/10 flex items-center justify-center shrink-0">
                     <Check className="w-4 h-4 text-success" />
                   </div>
-                  <span className="text-white">{feature.text}</span>
+                  <span className="text-text-primary">{feature.text}</span>
                 </li>
               ))}
             </ul>
@@ -143,14 +143,14 @@ export const Premium = () => {
 
           {/* Pricing Card */}
           <div className="glass-card p-6 sm:p-8 rounded-3xl border-2 border-primary relative flex flex-col justify-between">
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-primary to-secondary text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-primary to-secondary text-text-primary text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
               Most Popular
             </div>
             
             <div>
-              <h3 className="text-xl font-bold text-white mb-2 text-center">1 Month</h3>
+              <h3 className="text-xl font-bold text-text-primary mb-2 text-center">1 Month</h3>
               <div className="flex items-center justify-center gap-1 mb-2">
-                <span className="text-4xl font-black text-white">₹499</span>
+                <span className="text-4xl font-black text-text-primary">₹499</span>
                 <span className="text-text-secondary">/mo</span>
               </div>
               <p className="text-center text-sm text-text-secondary mb-8">

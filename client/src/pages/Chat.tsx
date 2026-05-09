@@ -59,7 +59,7 @@ export const Chat = () => {
       {/* Header */}
       <header className="flex-shrink-0 bg-card/80 backdrop-blur-xl border-b border-border p-4 flex items-center justify-between z-10">
         <div className="flex items-center gap-3">
-          <Link to="/matches" className="p-2 -ml-2 rounded-full hover:bg-white/10 text-text-primary transition-colors">
+          <Link to="/matches" className="p-2 -ml-2 rounded-full hover:bg-hover text-text-primary transition-colors">
             <ArrowLeft className="w-6 h-6" />
           </Link>
           
@@ -80,7 +80,7 @@ export const Chat = () => {
               )}
             </div>
             <div>
-              <h2 className="text-white font-bold group-hover:text-primary transition-colors">{otherUser?.name || 'Loading...'}</h2>
+              <h2 className="text-text-primary font-bold group-hover:text-primary transition-colors">{otherUser?.name || 'Loading...'}</h2>
               <p className="text-xs text-text-secondary">
                 {isOnline ? 'Online' : 'Offline'}
               </p>
@@ -89,10 +89,10 @@ export const Chat = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          <button className="p-2 rounded-full hover:bg-white/10 text-text-primary transition-colors">
+          <button className="p-2 rounded-full hover:bg-hover text-text-primary transition-colors">
             <Shield className="w-5 h-5" />
           </button>
-          <button className="p-2 rounded-full hover:bg-white/10 text-text-primary transition-colors">
+          <button className="p-2 rounded-full hover:bg-hover text-text-primary transition-colors">
             <MoreVertical className="w-5 h-5" />
           </button>
         </div>

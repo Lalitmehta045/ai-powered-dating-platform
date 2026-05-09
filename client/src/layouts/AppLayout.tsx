@@ -40,9 +40,9 @@ export const AppLayout = () => {
       <aside className="hidden md:flex flex-col w-64 border-r border-border bg-card/50 backdrop-blur-xl h-screen sticky top-0 py-8 px-4 z-40">
         <div className="flex items-center gap-2 px-4 mb-12">
           <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
-            <span className="text-white font-bold text-lg font-accent">H</span>
+            <span className="text-text-primary font-bold text-lg font-accent">H</span>
           </div>
-          <span className="text-xl font-bold font-accent tracking-wide text-white">HeartSync</span>
+          <span className="text-xl font-bold font-accent tracking-wide text-text-primary">HeartSync</span>
         </div>
 
         <nav className="flex flex-col gap-2 flex-1">
@@ -54,7 +54,7 @@ export const AppLayout = () => {
                 "flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300",
                 isActive 
                   ? "bg-primary/10 text-primary font-semibold" 
-                  : "text-text-secondary hover:bg-white/5 hover:text-white"
+                  : "text-text-secondary hover:bg-hover/50 hover:text-text-primary"
               )}
             >
               <item.icon className="w-6 h-6" />
@@ -85,7 +85,7 @@ export const AppLayout = () => {
               to={item.path}
               className={({ isActive }) => cn(
                 "flex flex-col items-center gap-1 p-2 rounded-xl transition-all",
-                isActive ? "text-primary" : "text-text-secondary hover:text-white"
+                isActive ? "text-primary" : "text-text-secondary hover:text-text-primary"
               )}
             >
               <item.icon className={cn("w-6 h-6", item.label === 'Premium' && "text-secondary")} />

@@ -17,9 +17,9 @@ export const Button = React.forwardRef<HTMLButtonElement, MotionButtonProps>(
     const variants = {
       primary: 'bg-primary text-white hover:bg-primary-hover shadow-lg shadow-primary/25 border border-transparent',
       secondary: 'bg-secondary text-white hover:bg-secondary-hover shadow-lg shadow-secondary/25 border border-transparent',
-      outline: 'bg-transparent border border-border text-text-primary hover:bg-white/5',
-      ghost: 'bg-transparent text-text-primary hover:bg-white/5 border border-transparent',
-      glass: 'glass hover:bg-white/10 text-white',
+      outline: 'bg-transparent border border-border text-text-primary hover:bg-hover/50',
+      ghost: 'bg-transparent text-text-primary hover:bg-hover/50 border border-transparent',
+      glass: 'glass hover:bg-hover text-text-primary',
     };
 
     const sizes = {

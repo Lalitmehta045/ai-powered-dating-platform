@@ -136,13 +136,13 @@ export const SwipeCard: React.FC<SwipeCardProps> = ({ user, onSwipe, active = tr
           {user.interests?.slice(0, 3).map((interest, idx) => (
             <span 
               key={idx}
-              className="px-3 py-1 rounded-full text-xs font-medium glass border border-white/20 text-white shadow-sm"
+              className="px-3 py-1 rounded-full text-xs font-medium glass border border-border text-white shadow-sm"
             >
               {interest}
             </span>
           ))}
           {user.interests && user.interests.length > 3 && (
-            <span className="px-3 py-1 rounded-full text-xs font-medium glass border border-white/20 text-white shadow-sm">
+            <span className="px-3 py-1 rounded-full text-xs font-medium glass border border-border text-white shadow-sm">
               +{user.interests.length - 3}
             </span>
           )}

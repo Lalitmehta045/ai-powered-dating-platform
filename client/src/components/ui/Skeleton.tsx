@@ -20,7 +20,7 @@ export const Skeleton: React.FC<SkeletonProps> = ({ className, ...props }) => {
 export const FullScreenLoader = () => (
   <div className="min-h-screen bg-background flex flex-col items-center justify-center p-8">
     <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center mb-8 animate-bounce shadow-xl shadow-primary/20">
-      <span className="text-white font-bold text-2xl font-accent">H</span>
+      <span className="text-text-primary font-bold text-2xl font-accent">H</span>
     </div>
     <div className="w-48 space-y-4">
       <Skeleton className="h-4 w-full rounded-full" />

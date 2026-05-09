@@ -11,6 +11,7 @@
     --text-secondary: #B0B3C0;
     --glass-bg: rgba(255, 255, 255, 0.05);
     --glass-border: rgba(255, 255, 255, 0.1);
+    --hover-bg: rgba(255, 255, 255, 0.1);
     
     --primary: #FF4D6D;
     --primary-hover: #E63E5C;
@@ -26,8 +27,9 @@
     --border: #E9ECEF;
     --text-primary: #1A1A1A;
     --text-secondary: #6C757D;
-    --glass-bg: rgba(0, 0, 0, 0.02);
+    --glass-bg: rgba(255, 255, 255, 0.7);
     --glass-border: rgba(0, 0, 0, 0.05);
+    --hover-bg: rgba(0, 0, 0, 0.05);
   }
 }
 

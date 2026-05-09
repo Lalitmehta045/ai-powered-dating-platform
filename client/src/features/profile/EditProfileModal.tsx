@@ -103,8 +103,8 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onCl
             exit={{ scale: 0.95, y: 20 }}
           >
             <div className="flex justify-between items-center p-6 border-b border-border/50">
-              <h2 className="text-xl font-bold text-white">Edit Profile</h2>
-              <button onClick={onClose} className="p-2 rounded-full hover:bg-white/10 text-text-secondary transition-colors">
+              <h2 className="text-xl font-bold text-text-primary">Edit Profile</h2>
+              <button onClick={onClose} className="p-2 rounded-full hover:bg-hover text-text-secondary transition-colors">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -122,7 +122,7 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onCl
                 />
                 <div 
                   onClick={() => fileInputRef.current?.click()}
-                  className="w-full h-40 border-2 border-dashed border-border rounded-2xl flex flex-col items-center justify-center bg-background/50 hover:bg-white/5 transition-colors cursor-pointer group relative overflow-hidden"
+                  className="w-full h-40 border-2 border-dashed border-border rounded-2xl flex flex-col items-center justify-center bg-background/50 hover:bg-hover/50 transition-colors cursor-pointer group relative overflow-hidden"
                 >
                   {isUploading ? (
                     <div className="flex flex-col items-center">
@@ -173,7 +173,7 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onCl
                     <textarea
                       {...register('bio')}
                       rows={4}
-                      className="w-full bg-background border border-border rounded-xl px-4 py-3 text-white placeholder-text-secondary focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all resize-none"
+                      className="w-full bg-background border border-border rounded-xl px-4 py-3 text-text-primary placeholder-text-secondary focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all resize-none"
                       placeholder="Write a little about yourself..."
                     />
                     {isGenerating && (

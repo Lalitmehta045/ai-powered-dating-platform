@@ -22,7 +22,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isOwn }) 
     >
       <div className={cn(
         "max-w-[75%] rounded-2xl px-4 py-2 relative group",
-        isOwn ? "bg-primary text-white rounded-br-sm" : "glass rounded-bl-sm text-text-primary"
+        isOwn ? "bg-primary text-text-primary rounded-br-sm" : "glass rounded-bl-sm text-text-primary"
       )}>
         <p className="text-sm md:text-base break-words leading-relaxed">{message.content}</p>
         <span className={cn(

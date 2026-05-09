@@ -39,7 +39,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ matchId }) => {
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center text-center h-full mb-10">
             <p className="text-text-secondary mb-2">It's quiet here...</p>
-            <p className="text-white font-medium">Send a message to break the ice!</p>
+            <p className="text-text-primary font-medium">Send a message to break the ice!</p>
           </div>
         ) : (
           messages.map((msg) => (
