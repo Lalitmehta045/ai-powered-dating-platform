@@ -24,7 +24,7 @@ export const AdminLayout = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -51,7 +51,15 @@ export const AdminLayout = () => {
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
         lg:relative lg:translate-x-0
       `}>
-        <div className="h-full flex flex-col p-4">
+        {/* Backdrop for mobile */}
+        {isSidebarOpen && (
+          <div 
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
+            onClick={() => setIsSidebarOpen(false)}
+          />
+        )}
+        
+        <div className="h-full flex flex-col p-4 relative z-50 bg-surface">
           <div className="flex items-center space-x-3 px-2 mb-8 mt-2">
             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
               <ShieldCheck className="w-5 h-5 text-white" />
@@ -72,6 +80,7 @@ export const AdminLayout = () => {
                       ? 'bg-primary/10 text-primary' 
                       : 'text-text-secondary hover:bg-white/5 hover:text-text-primary'}
                   `}
+                  onClick={() => setIsSidebarOpen(false)}
                 >
                   <item.icon className={`w-5 h-5 ${isActive ? 'text-primary' : 'text-text-muted'}`} />
                   <span className="font-medium">{item.label}</span>

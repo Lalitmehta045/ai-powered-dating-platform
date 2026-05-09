@@ -17,7 +17,7 @@ import {
 const COLORS = ['#FF4D6D', '#7B61FF', '#22C55E', '#FFB800', '#00CFE8'];
 
 export const UserGrowthChart = ({ data }: { data: any[] }) => (
-  <div className="h-[300px] w-full">
+  <div className="h-[300px] w-full min-h-[300px]">
     <ResponsiveContainer width="100%" height="100%">
       <AreaChart data={data}>
         <defs>
@@ -47,7 +47,7 @@ export const UserGrowthChart = ({ data }: { data: any[] }) => (
 );
 
 export const GenderPieChart = ({ data }: { data: any[] }) => (
-  <div className="h-[300px] w-full">
+  <div className="h-[300px] w-full min-h-[300px]">
     <ResponsiveContainer width="100%" height="100%">
       <PieChart>
         <Pie
@@ -82,7 +82,7 @@ export const EngagementChart = ({ swipes, matches }: { swipes: any[], matches: a
   }));
 
   return (
-    <div className="h-[300px] w-full">
+    <div className="h-[300px] w-full min-h-[300px]">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data}>
           <CartesianGrid strokeDasharray="3 3" stroke="#2A2A35" vertical={false} />
