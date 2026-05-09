@@ -22,18 +22,26 @@ export const SwipeCard: React.FC<SwipeCardProps> = ({ user, onSwipe, active = tr
   const nopeOpacity = useTransform(x, [-20, -100], [0, 1]);
 
   const handleDragEnd = async (event: any, info: PanInfo) => {
-    const threshold = 100;
+    const threshold = 120; // Slightly higher threshold for deliberate swipes
     const velocity = info.velocity.x;
     
-    if (info.offset.x > threshold || velocity > 500) {
-      setExitX(400);
+    if (info.offset.x > threshold || velocity > 800) {
+      setExitX(600); // Further exit for smoother feel
       onSwipe('right', user);
-    } else if (info.offset.x < -threshold || velocity < -500) {
-      setExitX(-400);
+    } else if (info.offset.x < -threshold || velocity < -800) {
+      setExitX(-600);
       onSwipe('left', user);
     } else {
-      // Snap back to center
-      controls.start({ x: 0, transition: { type: 'spring', stiffness: 300, damping: 20 } });
+      // Snap back to center with more "bouncy" spring
+      controls.start({ 
+        x: 0, 
+        transition: { 
+          type: 'spring', 
+          stiffness: 500, 
+          damping: 30,
+          mass: 0.8
+        } 
+      });
     }
   };
 
@@ -42,22 +50,29 @@ export const SwipeCard: React.FC<SwipeCardProps> = ({ user, onSwipe, active = tr
   return (
     <motion.div
       className={cn(
-        "absolute w-full h-full rounded-3xl overflow-hidden bg-card shadow-2xl border border-border/50",
-        active ? "pointer-events-auto" : "pointer-events-none"
+        "absolute w-full h-full rounded-3xl overflow-hidden bg-card shadow-2xl border border-border/50 will-change-transform",
+        active ? "pointer-events-auto cursor-grab active:cursor-grabbing" : "pointer-events-none"
       )}
       style={{
         ...style,
         x,
         rotate,
-        gridArea: '1 / 1', // Stack them on top of each other
+        gridArea: '1 / 1',
+        touchAction: 'none', // Prevent scrolling while swiping
       }}
       drag={active ? "x" : false}
       dragConstraints={{ left: 0, right: 0 }}
-      dragElastic={1}
+      dragElastic={0.9} // Higher elasticity for more feedback
       onDragEnd={handleDragEnd}
       animate={controls}
-      exit={{ x: exitX, opacity: 0, transition: { duration: 0.2 } }}
+      exit={{ 
+        x: exitX, 
+        opacity: 0, 
+        scale: 0.5,
+        transition: { duration: 0.3, ease: "easeIn" } 
+      }}
       whileTap={active ? { scale: 0.98 } : {}}
+      whileDrag={{ scale: 1.02, rotate: 0 }} // Visual feedback when dragging
     >
       {/* Background Image */}
       <div 
