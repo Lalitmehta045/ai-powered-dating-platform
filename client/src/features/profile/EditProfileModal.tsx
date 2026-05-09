@@ -89,7 +89,7 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onCl
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
+          className="fixed inset-0 z-[60] flex items-center justify-center p-4 sm:p-6"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -97,19 +97,19 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onCl
           <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" onClick={onClose} />
           
           <motion.div
-            className="relative z-10 w-full max-w-lg bg-card border border-border rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-full"
+            className="relative z-10 w-full max-w-lg bg-card border border-border rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] sm:max-h-[85vh]"
             initial={{ scale: 0.95, y: 20 }}
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.95, y: 20 }}
           >
-            <div className="flex justify-between items-center p-6 border-b border-border/50">
-              <h2 className="text-xl font-bold text-text-primary">Edit Profile</h2>
+            <div className="flex justify-between items-center p-5 sm:p-6 border-b border-border/50 shrink-0">
+              <h2 className="text-xl font-bold text-text-primary font-accent">Edit Profile</h2>
               <button onClick={onClose} className="p-2 rounded-full hover:bg-hover text-text-secondary transition-colors">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="overflow-y-auto p-6 scrollbar-hide flex-1">
+            <div className="overflow-y-auto p-5 sm:p-6 scrollbar-hide flex-1">
               {/* Image Upload */}
               <div className="mb-8">
                 <h3 className="text-sm font-medium text-text-primary mb-3">Profile Picture</h3>
@@ -193,14 +193,15 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onCl
                     error={errors.interests?.message}
                   />
                 </div>
+                <div className="h-6" /> {/* Extra spacer for mobile scrolling */}
               </form>
             </div>
 
-            <div className="p-6 border-t border-border/50 bg-card/80 backdrop-blur-sm mt-auto">
+            <div className="p-5 sm:p-6 border-t border-border/50 bg-card/80 backdrop-blur-sm mt-auto shrink-0">
               <Button 
                 type="submit" 
                 form="edit-profile-form" 
-                className="w-full" 
+                className="w-full rounded-full shadow-lg shadow-primary/20" 
                 isLoading={isLoading}
               >
                 Save Changes
