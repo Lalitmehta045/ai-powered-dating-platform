@@ -1,9 +1,10 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import type { BaseQueryFn, FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
+import { env } from '../../config/env';
 import { logout } from '../slices/authSlice';
 
 const baseQuery = fetchBaseQuery({ 
-  baseUrl: '/api/v1',
+  baseUrl: env.VITE_API_URL,
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as any).auth.token || localStorage.getItem('token');
     if (token) {

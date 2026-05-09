@@ -1,4 +1,5 @@
 import { io, Socket } from 'socket.io-client';
+import { env } from '../config/env';
 
 class SocketClient {
   private socket: Socket | null = null;
@@ -15,7 +16,7 @@ class SocketClient {
     
     this.isConnecting = true;
     
-    this.socket = io('/', {
+    this.socket = io(env.VITE_SOCKET_URL, {
       auth: { token },
       autoConnect: true,
       reconnection: true,
