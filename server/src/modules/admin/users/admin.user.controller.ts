@@ -1,8 +1,9 @@
-import { Request, Response, NextFunction } from "express";
+import { Response, NextFunction } from "express";
 import { adminUserService } from "./admin.user.service";
+import { AdminRequest } from "../../../middleware/admin.auth";
 
 export class AdminUserController {
-  async listUsers(req: Request, res: Response, next: NextFunction) {
+  async listUsers(req: any, res: Response, next: NextFunction) {
     try {
       const result = await adminUserService.getUsers(req.query);
       res.status(200).json({
@@ -14,9 +15,10 @@ export class AdminUserController {
     }
   }
 
-  async getUserDetail(req: Request, res: Response, next: NextFunction) {
+  async getUserDetail(req: AdminRequest, res: Response, next: NextFunction) {
     try {
-      const result = await adminUserService.getUserById(req.params.id);
+      const id = String(req.params.id);
+      const result = await adminUserService.getUserById(id);
       res.status(200).json({
         success: true,
         data: result
@@ -26,14 +28,15 @@ export class AdminUserController {
     }
   }
 
-  async updateStatus(req: Request, res: Response, next: NextFunction) {
+  async updateStatus(req: AdminRequest, res: Response, next: NextFunction) {
     try {
       const { status, suspensionDays } = req.body;
-      const adminId = (req as any).adminId;
-      const ip = req.ip;
-      const ua = req.headers["user-agent"];
+      const adminId = req.adminId;
+      const ip = req.ip || "";
+      const ua = req.headers["user-agent"] || "";
+      const id = String(req.params.id);
 
-      const user = await adminUserService.updateUserStatus(req.params.id, status, suspensionDays, adminId, ip, ua);
+      const user = await adminUserService.updateUserStatus(id, String(status), suspensionDays, adminId || "", ip, ua);
       
       res.status(200).json({
         success: true,
@@ -45,14 +48,15 @@ export class AdminUserController {
     }
   }
 
-  async togglePremium(req: Request, res: Response, next: NextFunction) {
+  async togglePremium(req: AdminRequest, res: Response, next: NextFunction) {
     try {
       const { isPremium } = req.body;
-      const adminId = (req as any).adminId;
-      const ip = req.ip;
-      const ua = req.headers["user-agent"];
+      const adminId = req.adminId;
+      const ip = req.ip || "";
+      const ua = req.headers["user-agent"] || "";
+      const id = String(req.params.id);
 
-      const user = await adminUserService.togglePremium(req.params.id, isPremium, adminId, ip, ua);
+      const user = await adminUserService.togglePremium(id, Boolean(isPremium), adminId || "", ip, ua);
       
       res.status(200).json({
         success: true,

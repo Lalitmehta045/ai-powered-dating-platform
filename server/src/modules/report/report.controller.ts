@@ -1,8 +1,9 @@
-import { Request, Response, NextFunction } from "express";
+import { Response, NextFunction } from "express";
 import { reportService } from "./report.service";
+import { AdminRequest } from "../../middleware/admin.auth";
 
 export class ReportController {
-  async create(req: Request, res: Response, next: NextFunction) {
+  async create(req: any, res: Response, next: NextFunction) {
     try {
       const { targetUserId, reason, description } = req.body;
       const reporterId = (req as any).userId;
@@ -17,7 +18,7 @@ export class ReportController {
     }
   }
 
-  async list(req: Request, res: Response, next: NextFunction) {
+  async list(req: any, res: Response, next: NextFunction) {
     try {
       const result = await reportService.getReports(req.query);
       res.status(200).json({
@@ -29,14 +30,15 @@ export class ReportController {
     }
   }
 
-  async resolve(req: Request, res: Response, next: NextFunction) {
+  async resolve(req: AdminRequest, res: Response, next: NextFunction) {
     try {
       const { action, suspensionDays } = req.body;
-      const moderatorId = (req as any).adminId;
-      const ip = req.ip;
-      const ua = req.headers["user-agent"];
+      const moderatorId = req.adminId || "";
+      const ip = req.ip || "";
+      const ua = req.headers["user-agent"] || "";
+      const id = String(req.params.id);
 
-      const report = await reportService.resolveReport(req.params.id, moderatorId, action, suspensionDays, ip, ua);
+      const report = await reportService.resolveReport(id, moderatorId, String(action), suspensionDays, ip, ua);
       
       res.status(200).json({
         success: true,

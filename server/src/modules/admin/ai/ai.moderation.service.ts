@@ -43,11 +43,11 @@ export class AIModerationService {
     
     // Filter for toxicity in mock
     const flaggedMessages = toxicMessages
-      .filter(m => m.content.length > 5 && /(badword|offensive|toxic|scam)/i.test(m.content))
+      .filter(m => m.text.length > 5 && /(badword|offensive|toxic|scam)/i.test(m.text))
       .map(m => ({
         type: "message",
         user: m.sender,
-        content: m.content,
+        content: m.text,
         severity: "medium",
         confidence: 0.92,
         reason: "Toxic language detected",

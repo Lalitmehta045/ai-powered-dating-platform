@@ -1,12 +1,13 @@
-import { Request, Response, NextFunction } from "express";
+import { Response, NextFunction } from "express";
 import { adminService } from "./admin.service";
 import { auditService } from "./audit/audit.service";
+import { AdminRequest } from "../../middleware/admin.auth";
 
 export class AdminController {
   /**
    * Admin login
    */
-  async login(req: Request, res: Response, next: NextFunction) {
+  async login(req: any, res: Response, next: NextFunction) {
     try {
       const { admin, accessToken, refreshToken } = await adminService.login(req.body);
 
@@ -42,9 +43,12 @@ export class AdminController {
   /**
    * Get current admin info
    */
-  async getMe(req: Request, res: Response, next: NextFunction) {
+  async getMe(req: AdminRequest, res: Response, next: NextFunction) {
     try {
-      const admin = await adminService.getMe(req.admin.id);
+      const adminId = req.admin?.id;
+      if (!adminId) throw new Error("Admin not found");
+
+      const admin = await adminService.getMe(adminId);
       res.status(200).json({
         success: true,
         admin,
@@ -57,9 +61,9 @@ export class AdminController {
   /**
    * Admin logout
    */
-  async logout(req: Request, res: Response, next: NextFunction) {
+  async logout(req: AdminRequest, res: Response, next: NextFunction) {
     try {
-      const adminId = (req as any).adminId;
+      const adminId = req.adminId;
       if (adminId) {
         await auditService.recordLog({
           adminId,

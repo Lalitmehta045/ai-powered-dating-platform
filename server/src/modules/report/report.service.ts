@@ -21,7 +21,7 @@ export class ReportService {
     const report = await Report.create({
       reporterId,
       targetUserId,
-      reason,
+      reason: reason as any,
       description
     });
 
@@ -98,7 +98,7 @@ export class ReportService {
         throw AppError.badRequest("Invalid action");
     }
 
-    report.status = action === "dismiss" ? "dismissed" : "resolved";
+    report.status = action === "dismiss" ? ("dismissed" as any) : ("resolved" as any);
     report.actionTaken = actionTaken;
     report.moderatorId = moderatorId as any;
     report.resolvedAt = new Date();

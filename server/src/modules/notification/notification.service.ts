@@ -15,12 +15,19 @@ export class NotificationService {
   async createNotification(data: {
     receiver: string;
     sender?: string;
-    type: string;
+    type: "new_match" | "new_message" | "profile_like" | "announcement" | "moderation_action";
     title: string;
     message: string;
     metadata?: any;
   }) {
-    const notification = await Notification.create(data);
+    const notification = await Notification.create({
+      receiver: data.receiver,
+      sender: data.sender,
+      type: data.type,
+      title: data.title,
+      message: data.message,
+      metadata: data.metadata || {}
+    });
     
     try {
       const io = getIO();
@@ -76,8 +83,6 @@ export class NotificationService {
     // Real-time broadcast
     try {
       const io = getIO();
-      // If broad enough, broadcast to all. If segmented, emit to relevant groups if possible
-      // For now, emit to each userId individually or use a global room
       if (data.target === "all") {
         io.emit("notification:broadcast", { title: data.title, message: data.message });
       } else {

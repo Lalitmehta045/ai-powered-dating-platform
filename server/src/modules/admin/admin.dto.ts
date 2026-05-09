@@ -2,19 +2,28 @@
  * Admin Data Transfer Object (DTO) Sanitizers
  */
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type AdminLike = any;
+export interface SanitizedAdmin {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  isActive: boolean;
+  lastLogin?: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
-const toPlain = (admin: AdminLike): Record<string, unknown> => {
-  if (admin && typeof admin.toObject === "function") {
-    return admin.toObject();
-  }
-  return { ...admin };
-};
-
-export const sanitizeAdmin = (admin: AdminLike): Record<string, unknown> => {
-  const plain = toPlain(admin);
-  delete plain.password;
-  delete plain.__v;
-  return plain;
+export const sanitizeAdmin = (admin: any): SanitizedAdmin => {
+  const plain = admin.toObject ? admin.toObject() : { ...admin };
+  
+  return {
+    id: (plain._id || plain.id).toString(),
+    name: plain.name,
+    email: plain.email,
+    role: plain.role,
+    isActive: plain.isActive,
+    lastLogin: plain.lastLogin,
+    createdAt: plain.createdAt,
+    updatedAt: plain.updatedAt
+  };
 };

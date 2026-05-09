@@ -15,7 +15,7 @@ const notificationSchema = new mongoose.Schema(
     sender: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      required: false, // Optional for system/broadcast notifications
       index: true,
     },
     receiver: {
@@ -26,9 +26,17 @@ const notificationSchema = new mongoose.Schema(
     },
     type: {
       type: String,
-      enum: ["new_match", "new_message", "profile_like"],
+      enum: ["new_match", "new_message", "profile_like", "announcement", "moderation_action"],
       required: true,
       index: true,
+    },
+    title: {
+      type: String,
+      required: true,
+    },
+    message: {
+      type: String,
+      required: true,
     },
     isRead: {
       type: Boolean,
@@ -47,10 +55,6 @@ const notificationSchema = new mongoose.Schema(
 
 /**
  * Database Indexes
- * 
- * 1. Compound Index (receiver, isRead, createdAt):
- *    Highly optimized for the most common query: fetching a user's 
- *    unread notifications ordered by recency.
  */
 notificationSchema.index({ receiver: 1, isRead: 1, createdAt: -1 });
 
