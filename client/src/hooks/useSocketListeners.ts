@@ -103,6 +103,16 @@ export const useSocketListeners = () => {
       }
     });
 
+    socket.on('notification:broadcast', (notification) => {
+      const notificationsEnabled = user?.settings?.notificationsEnabled ?? true;
+      if (notificationsEnabled) {
+        toast.success(notification.message || 'System Announcement!', {
+          duration: 6000,
+          icon: '📢'
+        });
+      }
+    });
+
     return () => {
       socket.off('online-users');
       socket.off('user-online');
@@ -111,6 +121,7 @@ export const useSocketListeners = () => {
       socket.off('stop-typing');
       socket.off('receive-message');
       socket.off('notification:new');
+      socket.off('notification:broadcast');
     };
   }, [isAuthenticated, dispatch, user]);
 };
