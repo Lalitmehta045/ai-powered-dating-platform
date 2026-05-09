@@ -10,6 +10,7 @@ import { setActiveChatId } from '../store/slices/messageSlice';
 
 import { ChatWindow } from '../features/chat/ChatWindow';
 import { ChatInput } from '../features/chat/ChatInput';
+import { ProfileViewModal } from '../features/profile/ProfileViewModal';
 
 export const Chat = () => {
   const { userId: matchId } = useParams<{ userId: string }>();
@@ -17,6 +18,7 @@ export const Chat = () => {
   const dispatch = useDispatch();
 
   const currentUser = useSelector((state: RootState) => state.auth.user);
+   const [isProfileModalOpen, setIsProfileModalOpen] = React.useState(false);
   const onlineUsers = useSelector((state: RootState) => state.message.onlineUsers);
   
   const { data: matchesData } = useGetMatchesQuery();
@@ -61,9 +63,12 @@ export const Chat = () => {
             <ArrowLeft className="w-6 h-6" />
           </Link>
           
-          <div className="flex items-center gap-3">
+          <div 
+            className="flex items-center gap-3 cursor-pointer group"
+            onClick={() => setIsProfileModalOpen(true)}
+          >
             <div className="relative">
-              <div className="w-10 h-10 rounded-full overflow-hidden border border-border">
+              <div className="w-10 h-10 rounded-full overflow-hidden border border-border group-hover:border-primary transition-colors">
                 <img 
                   src={otherUser?.profileImage || defaultImage} 
                   alt={otherUser?.name || 'User'} 
@@ -75,7 +80,7 @@ export const Chat = () => {
               )}
             </div>
             <div>
-              <h2 className="text-white font-bold">{otherUser?.name || 'Loading...'}</h2>
+              <h2 className="text-white font-bold group-hover:text-primary transition-colors">{otherUser?.name || 'Loading...'}</h2>
               <p className="text-xs text-text-secondary">
                 {isOnline ? 'Online' : 'Offline'}
               </p>
@@ -98,6 +103,13 @@ export const Chat = () => {
 
       {/* Input Area */}
       <ChatInput matchId={matchId} onSend={handleSendMessage} />
+
+      {/* Profile Modal */}
+      <ProfileViewModal 
+        isOpen={isProfileModalOpen}
+        onClose={() => setIsProfileModalOpen(false)}
+        user={otherUser as any}
+      />
     </div>
   );
 };
