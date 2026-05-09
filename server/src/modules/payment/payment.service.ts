@@ -2,18 +2,13 @@ import crypto from "crypto";
 import Razorpay from "razorpay";
 
 import User from "../auth/auth.model";
+import Transaction from "./transaction.model";
 import { AppError } from "../../errors/AppError";
 import { env } from "../../config/env";
 import { sanitizeUser } from "../auth/user.dto";
 import { logger } from "../../logger/logger";
 
 // ── Razorpay client ──────────────────────────────────────────
-
-/**
- * Initializes the Razorpay SDK instance.
- * Gracefully returns null if keys are missing (allows the app to run
- * locally without payment gateway configuration).
- */
 const getRazorpayClient = () => {
   const keyId = env.RAZORPAY_KEY_ID;
   const keySecret = env.RAZORPAY_KEY_SECRET;
@@ -26,10 +21,6 @@ const getRazorpayClient = () => {
 };
 
 // ── Low-level Razorpay helpers ───────────────────────────────
-
-/**
- * Communicates with Razorpay APIs to generate a new order ID.
- */
 export const createRazorpayOrder = async (
   amountInRupees: number,
   receipt: string
@@ -46,15 +37,9 @@ export const createRazorpayOrder = async (
     payment_capture: true,
   });
 
-  logger.info("Razorpay order created", { orderId: order.id, amount: order.amount });
   return order;
 };
 
-/**
- * Security: Validates the HMAC SHA256 signature returned by Razorpay
- * to mathematically prove the payment payload wasn't tampered with
- * by a malicious client before reaching our backend.
- */
 export const verifyRazorpaySignature = (params: {
   orderId: string;
   paymentId: string;
@@ -73,15 +58,11 @@ export const verifyRazorpaySignature = (params: {
 };
 
 // ── Constants ────────────────────────────────────────────────
-
 const subscriptionAmountByType = {
   monthly: 499,
   yearly: 3999,
 } as const;
 
-/**
- * Calculates the expiration date based on the chosen subscription tier.
- */
 const getPremiumExpiry = (subscriptionType: "monthly" | "yearly") => {
   const now = new Date();
   if (subscriptionType === "monthly") {
@@ -94,17 +75,8 @@ const getPremiumExpiry = (subscriptionType: "monthly" | "yearly") => {
 
 /**
  * Payment Service
- *
- * High-level orchestration of the payment flow, combining Razorpay
- * integration with internal database state updates (activating Premium).
- * 
- * TODO: Abstract payment gateway interfaces to support Stripe/PayPal
- *       alongside Razorpay in the future.
  */
 export class PaymentService {
-  /**
-   * Generates a payment order for the frontend SDK to consume.
-   */
   async createOrder(userId: string, subscriptionType: "monthly" | "yearly") {
     const amount = subscriptionAmountByType[subscriptionType];
     const order = await createRazorpayOrder(
@@ -119,17 +91,6 @@ export class PaymentService {
     };
   }
 
-  /**
-   * Finalizes the transaction and activates premium access.
-   * 
-   * Flow:
-   * 1. Cryptographically verify signature from client payload.
-   * 2. Calculate expiration date.
-   * 3. Update User document atomically.
-   * 4. Return sanitized user profile for immediate frontend sync.
-   * 
-   * @throws AppError 400 if signature validation fails.
-   */
   async verifyPayment(
     userId: string,
     data: {
@@ -146,10 +107,20 @@ export class PaymentService {
     });
 
     if (!valid) {
-      logger.warn("Payment signature verification failed", { userId });
       throw AppError.badRequest("Invalid payment signature");
     }
 
+    // 1. Record Transaction
+    await Transaction.create({
+      userId,
+      amount: subscriptionAmountByType[data.subscriptionType],
+      subscriptionType: data.subscriptionType,
+      paymentId: data.razorpay_payment_id,
+      orderId: data.razorpay_order_id,
+      status: "success",
+    });
+
+    // 2. Activate Premium
     const premiumExpiresAt = getPremiumExpiry(data.subscriptionType);
     const updated = await User.findByIdAndUpdate(
       userId,

@@ -39,6 +39,7 @@ import { isRedisConnected } from "./redis/redis";
 import { corsConfig } from "./config/cors";
 import { sanitizeRequest } from "./middleware/sanitize.middleware";
 import { requestLogger } from "./middleware/requestLogger";
+import { recordLatency } from "./middleware/latency.middleware";
 import { globalErrorHandler } from "./middleware/globalErrorHandler";
 
 // ── Route imports ────────────────────────────────────────────
@@ -50,6 +51,8 @@ import chatRoutes from "./modules/chat/chat.routes";
 import notificationRoutes from "./modules/notification/notification.routes";
 import paymentRoutes from "./modules/payment/payment.routes";
 import aiRoutes from "./modules/ai/ai.routes";
+import adminRoutes from "./modules/admin/admin.routes";
+import reportRoutes from "./modules/report/report.routes";
 
 const app = express();
 
@@ -61,6 +64,7 @@ app.use(helmet());
 app.use(compression());
 app.use(cookieParser());
 app.use(requestLogger);
+app.use(recordLatency);
 app.use(sanitizeRequest);
 app.use(hpp());
 
@@ -92,6 +96,8 @@ app.use("/api/v1/chat", chatRoutes);
 app.use("/api/v1/notifications", notificationRoutes);
 app.use("/api/v1/payments", paymentRoutes);
 app.use("/api/v1/ai", aiRoutes);
+app.use("/api/v1/admin", adminRoutes);
+app.use("/api/v1/reports", reportRoutes);
 
 // ── Backward-compatible routes (same routers) ────────────────
 // These will be deprecated once all clients migrate to /api/v1.

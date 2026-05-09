@@ -1,32 +1,17 @@
-/**
- * JWT Authentication Middleware
- *
- * Secures API endpoints by validating JSON Web Tokens sent in
- * the Authorization header (`Bearer <token>`).
- *
- * Security:
- * - Rejects missing or malformed headers.
- * - Rejects expired or tampered tokens.
- * - Extracts the `userId` from the decoded token payload and
- *   attaches it to `req.userId` for downstream controllers.
- *
- * Architecture Notes:
- * - This middleware is stateless; it validates the token signature
- *   against the `JWT_SECRET` without hitting the database. This is
- *   highly performant but requires a separate token invalidation
- *   strategy (e.g., short-lived access tokens + refresh tokens)
- *   for handling immediate logouts or compromised accounts.
- */
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { env } from "../config/env";
+import User from "../modules/auth/auth.model";
 
 export interface AuthRequest extends Request {
   userId?: string;
-  file?: Express.Multer.File;
+  user?: any;
 }
 
-const protect = (req: AuthRequest, res: Response, next: NextFunction) => {
+/**
+ * JWT Authentication Middleware with Status Verification
+ */
+const protect = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const authHeader = req.headers.authorization;
 
@@ -43,13 +28,47 @@ const protect = (req: AuthRequest, res: Response, next: NextFunction) => {
       id: string;
     };
 
+    // Database Status Check
+    const user = await User.findById(decoded.id).select("status suspensionExpiresAt");
+    
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "User no longer exists",
+      });
+    }
+
+    // Check for Ban
+    if (user.status === "banned") {
+      return res.status(403).json({
+        success: false,
+        message: "Your account has been permanently banned.",
+      });
+    }
+
+    // Check for Suspension
+    if (user.status === "suspended") {
+      if (user.suspensionExpiresAt && user.suspensionExpiresAt > new Date()) {
+        return res.status(403).json({
+          success: false,
+          message: `Your account is suspended until ${user.suspensionExpiresAt.toLocaleDateString()}`,
+        });
+      } else {
+        // Suspension expired, automatically lift it
+        user.status = "active";
+        user.suspensionExpiresAt = null;
+        await user.save();
+      }
+    }
+
     req.userId = decoded.id;
+    req.user = user;
 
     next();
   } catch (error) {
     return res.status(401).json({
       success: false,
-      message: "Invalid token",
+      message: "Invalid or expired token",
     });
   }
 };

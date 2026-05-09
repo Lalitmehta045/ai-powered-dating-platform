@@ -8,8 +8,15 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        card: "var(--card)",
+        background: {
+          DEFAULT: "var(--background)",
+          alt: "var(--background-alt)",
+        },
+        surface: {
+          DEFAULT: "var(--surface)",
+          alt: "var(--surface-alt)",
+        },
+        card: "var(--surface)", // Alias for surface
         border: "var(--border)",
         primary: {
           DEFAULT: "var(--primary)",
@@ -25,6 +32,7 @@ export default {
         text: {
           primary: "var(--text-primary)",
           secondary: "var(--text-secondary)",
+          muted: "var(--text-muted)",
         }
       },
       fontFamily: {

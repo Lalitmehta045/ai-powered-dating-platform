@@ -19,8 +19,10 @@ import { Server as HttpServer } from "http";
 import { Server as SocketIOServer } from "socket.io";
 import { createAdapter } from "@socket.io/redis-adapter";
 import { getRedisClient, isRedisConnected } from "../redis/redis";
-
 import { registerChatSocketHandlers } from "../modules/chat/chat.socket";
+import { monitoringService } from "../modules/admin/monitoring/monitoring.service";
+import jwt from "jsonwebtoken";
+import { env } from "../config/env";
 
 let ioInstance: SocketIOServer | null = null;
 
@@ -52,6 +54,23 @@ export const initializeSocket = (httpServer: HttpServer) => {
 
   // Register domain-specific socket handlers
   registerChatSocketHandlers(ioInstance);
+
+  // Admin Room & Monitoring
+  ioInstance.on("connection", (socket) => {
+    socket.on("admin:join", (token) => {
+      try {
+        const decoded = jwt.verify(token, env.JWT_SECRET) as any;
+        if (decoded.role) { // Basic check for admin token
+          socket.join("admin-room");
+          console.log(`[Socket.IO] Admin ${decoded.id} joined monitoring room.`);
+        }
+      } catch (err) {
+        socket.emit("error", { message: "Unauthorized admin socket connection" });
+      }
+    });
+  });
+
+  monitoringService.startMonitoring();
   
   return ioInstance;
 };
