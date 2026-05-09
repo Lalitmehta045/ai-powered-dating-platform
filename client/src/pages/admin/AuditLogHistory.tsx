@@ -40,8 +40,8 @@ export const AuditLogHistory = () => {
       </div>
 
       {/* Filters */}
-      <div className="bg-surface border border-border rounded-2xl p-6 flex flex-wrap items-center gap-4">
-        <div className="relative flex-1 min-w-[240px]">
+      <div className="bg-surface border border-border rounded-2xl p-6 flex flex-col md:flex-row md:items-center gap-4">
+        <div className="relative flex-1 w-full">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
           <input 
             type="text" 
@@ -51,14 +51,14 @@ export const AuditLogHistory = () => {
             className="w-full bg-background-alt border border-border rounded-xl pl-11 pr-4 py-3 focus:outline-none focus:border-primary/50 text-text-primary transition-all"
           />
         </div>
-        <div className="flex items-center space-x-2">
-          <button className="px-4 py-3 bg-background-alt border border-border rounded-xl text-sm font-bold flex items-center space-x-2 hover:bg-white/5 transition-all">
+        <div className="flex items-center space-x-2 w-full md:w-auto">
+          <button className="flex-1 md:flex-none px-4 py-3 bg-background-alt border border-border rounded-xl text-sm font-bold flex items-center justify-center space-x-2 hover:bg-white/5 transition-all">
             <Calendar className="w-4 h-4" />
             <span>Last 30 Days</span>
           </button>
-          <button className="px-4 py-3 bg-background-alt border border-border rounded-xl text-sm font-bold flex items-center space-x-2 hover:bg-white/5 transition-all">
+          <button className="flex-1 md:flex-none px-4 py-3 bg-background-alt border border-border rounded-xl text-sm font-bold flex items-center justify-center space-x-2 hover:bg-white/5 transition-all">
             <Filter className="w-4 h-4" />
-            <span>Advanced Filters</span>
+            <span>Filters</span>
           </button>
         </div>
       </div>
@@ -128,8 +128,8 @@ export const AuditLogHistory = () => {
         </div>
 
         {/* Pagination */}
-        <div className="px-6 py-4 bg-background-alt/30 border-t border-border flex items-center justify-between">
-          <p className="text-sm text-text-muted">
+        <div className="px-6 py-4 bg-background-alt/30 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-sm text-text-muted text-center sm:text-left">
             Displaying <span className="font-medium">{(page-1)*20 + 1}</span> - <span className="font-medium">{Math.min(page*20, data?.pagination.total || 0)}</span> of <span className="font-medium">{data?.pagination.total}</span> events
           </p>
           <div className="flex items-center space-x-2">

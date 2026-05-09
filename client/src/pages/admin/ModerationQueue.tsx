@@ -94,8 +94,8 @@ export const ModerationQueue = () => {
             <div key={report._id} className="bg-surface border border-border rounded-2xl overflow-hidden hover:border-primary/20 transition-all">
               <div className="p-6 space-y-6">
                 {/* User Info Header */}
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center space-x-12">
+                <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-12">
                     {/* Reporter */}
                     <div className="space-y-2">
                       <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Reporter</p>
@@ -105,13 +105,16 @@ export const ModerationQueue = () => {
                         </div>
                         <div>
                           <p className="text-sm font-bold">{report.reporterId?.name}</p>
-                          <p className="text-xs text-text-muted">{report.reporterId?.email}</p>
+                          <p className="text-xs text-text-muted truncate max-w-[150px]">{report.reporterId?.email}</p>
                         </div>
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-center h-10 pt-4">
+                    <div className="hidden sm:flex items-center justify-center h-10 pt-4">
                       <ChevronRight className="w-6 h-6 text-border" />
+                    </div>
+                    <div className="sm:hidden flex justify-center py-1">
+                       <ChevronLeft className="w-4 h-4 text-border rotate-270" />
                     </div>
 
                     {/* Target User */}
@@ -129,7 +132,7 @@ export const ModerationQueue = () => {
                     </div>
                   </div>
 
-                  <div className="flex flex-col items-end space-y-2">
+                  <div className="flex flex-col items-start lg:items-end space-y-2">
                     <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
                       report.reason === 'harassment' ? 'bg-red-500/10 text-red-500' :
                       'bg-amber-500/10 text-amber-500'
@@ -149,32 +152,32 @@ export const ModerationQueue = () => {
 
                 {/* Actions Bar */}
                 {report.status === 'pending' && (
-                  <div className="flex items-center justify-between pt-4 border-t border-border">
-                    <div className="flex items-center space-x-3">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-border">
+                    <div className="flex items-center space-x-3 w-full sm:w-auto">
                       <button 
                         onClick={() => handleAction(report._id, 'dismiss')}
-                        className="px-4 py-2 border border-border rounded-xl text-sm font-bold hover:bg-white/5 transition-all"
+                        className="flex-1 sm:flex-none px-4 py-2 border border-border rounded-xl text-sm font-bold hover:bg-white/5 transition-all"
                       >
                         Dismiss
                       </button>
                       <button 
                          onClick={() => handleAction(report._id, 'warn')}
-                        className="px-4 py-2 bg-amber-500/10 text-amber-500 rounded-xl text-sm font-bold hover:bg-amber-500/20 transition-all"
+                        className="flex-1 sm:flex-none px-4 py-2 bg-amber-500/10 text-amber-500 rounded-xl text-sm font-bold hover:bg-amber-500/20 transition-all"
                       >
-                        Warn User
+                        Warn
                       </button>
                     </div>
-                    <div className="flex items-center space-x-3">
+                    <div className="flex items-center space-x-3 w-full sm:w-auto">
                       <button 
                         onClick={() => handleAction(report._id, 'suspend', 7)}
-                        className="px-4 py-2 bg-primary/10 text-primary rounded-xl text-sm font-bold hover:bg-primary/20 transition-all flex items-center space-x-2"
+                        className="flex-1 sm:flex-none px-4 py-2 bg-primary/10 text-primary rounded-xl text-sm font-bold hover:bg-primary/20 transition-all flex items-center justify-center space-x-2"
                       >
                         <Clock className="w-4 h-4" />
-                        <span>Suspend 7d</span>
+                        <span>7d</span>
                       </button>
                       <button 
                         onClick={() => handleAction(report._id, 'ban')}
-                        className="px-4 py-2 bg-red-500 text-white rounded-xl text-sm font-bold hover:bg-red-600 transition-all shadow-lg shadow-red-500/20"
+                        className="flex-[2] sm:flex-none px-4 py-2 bg-red-500 text-white rounded-xl text-sm font-bold hover:bg-red-600 transition-all shadow-lg shadow-red-500/20"
                       >
                         Ban permanently
                       </button>

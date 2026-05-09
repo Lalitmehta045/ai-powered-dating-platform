@@ -197,8 +197,8 @@ export const PremiumManagement = () => {
         </div>
 
         {/* Pagination */}
-        <div className="px-6 py-4 bg-background-alt/30 border-t border-border flex items-center justify-between">
-          <p className="text-sm text-text-muted">
+        <div className="px-6 py-4 bg-background-alt/30 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-sm text-text-muted text-center sm:text-left">
             Showing <span className="font-medium">{(page-1)*10 + 1}</span> to <span className="font-medium">{Math.min(page*10, usersData?.pagination.total || 0)}</span> subscribers
           </p>
           <div className="flex items-center space-x-2">
