@@ -66,8 +66,8 @@ export const UserManagement = () => {
       </div>
 
       {/* Filters Bar */}
-      <div className="flex flex-wrap items-center gap-4 bg-surface p-4 border border-border rounded-2xl">
-        <div className="relative flex-1 min-w-[300px]">
+      <div className="flex flex-col lg:flex-row lg:items-center gap-4 bg-surface p-4 border border-border rounded-2xl">
+        <div className="relative flex-1 w-full">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
           <input 
             type="text" 
@@ -78,26 +78,28 @@ export const UserManagement = () => {
           />
         </div>
 
-        <select 
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-          className="bg-background-alt border border-border rounded-xl px-4 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/50"
-        >
-          <option value="">All Statuses</option>
-          <option value="active">Active</option>
-          <option value="suspended">Suspended</option>
-          <option value="banned">Banned</option>
-        </select>
+        <div className="flex items-center space-x-2 w-full lg:w-auto">
+          <select 
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="flex-1 lg:flex-none bg-background-alt border border-border rounded-xl px-4 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/50"
+          >
+            <option value="">All Statuses</option>
+            <option value="active">Active</option>
+            <option value="suspended">Suspended</option>
+            <option value="banned">Banned</option>
+          </select>
 
-        <select 
-          value={genderFilter}
-          onChange={(e) => setGenderFilter(e.target.value)}
-          className="bg-background-alt border border-border rounded-xl px-4 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/50"
-        >
-          <option value="">All Genders</option>
-          <option value="male">Male</option>
-          <option value="female">Female</option>
-        </select>
+          <select 
+            value={genderFilter}
+            onChange={(e) => setGenderFilter(e.target.value)}
+            className="flex-1 lg:flex-none bg-background-alt border border-border rounded-xl px-4 py-2 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/50"
+          >
+            <option value="">All Genders</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
+        </div>
       </div>
 
       {/* Table Content */}
@@ -109,7 +111,7 @@ export const UserManagement = () => {
                 <th className="px-6 py-4 text-xs font-bold text-text-muted uppercase tracking-wider">User</th>
                 <th className="px-6 py-4 text-xs font-bold text-text-muted uppercase tracking-wider">Status</th>
                 <th className="px-6 py-4 text-xs font-bold text-text-muted uppercase tracking-wider">Access</th>
-                <th className="px-6 py-4 text-xs font-bold text-text-muted uppercase tracking-wider">Created</th>
+                <th className="px-6 py-4 text-xs font-bold text-text-muted uppercase tracking-wider hidden sm:table-cell">Created</th>
                 <th className="px-6 py-4 text-xs font-bold text-text-muted uppercase tracking-wider text-right">Actions</th>
               </tr>
             </thead>
@@ -124,16 +126,16 @@ export const UserManagement = () => {
                 <tr key={user.id} className="hover:bg-white/5 transition-colors group">
                   <td className="px-6 py-4">
                     <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center border border-primary/20">
+                      <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center border border-primary/20 shrink-0">
                         {user.photos?.[0] ? (
                           <img src={user.photos[0]} className="w-full h-full object-cover rounded-xl" />
                         ) : (
                           <span className="text-primary font-bold">{user.name.charAt(0)}</span>
                         )}
                       </div>
-                      <div>
-                        <p className="font-semibold text-text-primary">{user.name}</p>
-                        <p className="text-xs text-text-muted">{user.email}</p>
+                      <div className="truncate max-w-[120px] sm:max-w-none">
+                        <p className="font-semibold text-text-primary truncate">{user.name}</p>
+                        <p className="text-xs text-text-muted truncate">{user.email}</p>
                       </div>
                     </div>
                   </td>
@@ -148,32 +150,32 @@ export const UserManagement = () => {
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center space-x-2">
-                      <Zap className={`w-4 h-4 ${user.isPremium ? 'text-amber-500' : 'text-text-muted'}`} />
-                      <span className="text-sm">{user.isPremium ? 'Premium' : 'Free'}</span>
+                      <Zap className={`w-4 h-4 shrink-0 ${user.isPremium ? 'text-amber-500' : 'text-text-muted'}`} />
+                      <span className="text-sm hidden sm:inline">{user.isPremium ? 'Premium' : 'Free'}</span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-sm text-text-muted">
+                  <td className="px-6 py-4 text-sm text-text-muted hidden sm:table-cell">
                     {new Date(user.createdAt).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4 text-right">
-                    <div className="flex items-center justify-end space-x-2">
+                    <div className="flex items-center justify-end space-x-1 sm:space-x-2">
                       <button 
                         onClick={() => handlePremiumToggle(user.id, user.isPremium)}
-                        className="p-2 hover:bg-amber-500/10 text-text-muted hover:text-amber-500 rounded-lg transition-all"
+                        className="p-1.5 sm:p-2 hover:bg-amber-500/10 text-text-muted hover:text-amber-500 rounded-lg transition-all"
                         title="Toggle Premium"
                       >
                         <Zap className="w-4 h-4" />
                       </button>
                       <button 
                         onClick={() => handleStatusChange(user.id, user.status === 'active' ? 'suspended' : 'active')}
-                        className="p-2 hover:bg-amber-500/10 text-text-muted hover:text-amber-500 rounded-lg transition-all"
+                        className="p-1.5 sm:p-2 hover:bg-amber-500/10 text-text-muted hover:text-amber-500 rounded-lg transition-all"
                         title={user.status === 'active' ? 'Suspend' : 'Activate'}
                       >
                         <Clock className="w-4 h-4" />
                       </button>
                       <button 
                          onClick={() => handleStatusChange(user.id, 'banned')}
-                         className="p-2 hover:bg-red-500/10 text-text-muted hover:text-red-500 rounded-lg transition-all"
+                         className="p-1.5 sm:p-2 hover:bg-red-500/10 text-text-muted hover:text-red-500 rounded-lg transition-all"
                          title="Ban User"
                       >
                         <UserX className="w-4 h-4" />
@@ -187,8 +189,8 @@ export const UserManagement = () => {
         </div>
 
         {/* Pagination */}
-        <div className="px-6 py-4 bg-background-alt/30 border-t border-border flex items-center justify-between">
-          <p className="text-sm text-text-muted">
+        <div className="px-6 py-4 bg-background-alt/30 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-sm text-text-muted text-center sm:text-left">
             Showing <span className="font-medium">{(page-1)*10 + 1}</span> to <span className="font-medium">{Math.min(page*10, data?.pagination.total || 0)}</span> of <span className="font-medium">{data?.pagination.total || 0}</span> users
           </p>
           <div className="flex items-center space-x-2">
