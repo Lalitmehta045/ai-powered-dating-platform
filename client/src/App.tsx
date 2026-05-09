@@ -21,6 +21,14 @@ function App() {
     }
   }, [isAuthenticated]);
 
+  const theme = useSelector((state: RootState) => state.auth.user?.settings?.theme || 'dark');
+
+  useEffect(() => {
+    const root = window.document.documentElement;
+    root.classList.remove('light', 'dark');
+    root.classList.add(theme);
+  }, [theme]);
+
   useEffect(() => {
     initAnalytics();
   }, []);

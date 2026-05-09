@@ -23,26 +23,33 @@ export const Settings = () => {
   };
 
   const notificationsEnabled = user?.settings?.notificationsEnabled ?? true;
+  const theme = user?.settings?.theme || 'dark';
 
   const toggleNotifications = async () => {
     const newState = !notificationsEnabled;
-    
-    // Optimistic update
     dispatch(updateUser({ 
-      settings: { ...user?.settings, notificationsEnabled: newState } 
+      settings: { ...user?.settings, notificationsEnabled: newState, theme } 
     }));
-
     try {
-      await updateProfile({ 
-        settings: { notificationsEnabled: newState } 
-      }).unwrap();
+      await updateProfile({ settings: { notificationsEnabled: newState, theme } }).unwrap();
       toast.success(`Notifications ${newState ? 'enabled' : 'disabled'}`);
     } catch (err) {
-      // Revert on error
-      dispatch(updateUser({ 
-        settings: { ...user?.settings, notificationsEnabled: !newState } 
-      }));
+      dispatch(updateUser({ settings: { ...user?.settings, notificationsEnabled: !newState, theme } }));
       toast.error('Failed to update settings');
+    }
+  };
+
+  const toggleTheme = async () => {
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    dispatch(updateUser({ 
+      settings: { ...user?.settings, notificationsEnabled, theme: newTheme } 
+    }));
+    try {
+      await updateProfile({ settings: { notificationsEnabled, theme: newTheme } }).unwrap();
+      toast.success(`${newTheme.charAt(0).toUpperCase() + newTheme.slice(1)} mode activated`);
+    } catch (err) {
+      dispatch(updateUser({ settings: { ...user?.settings, notificationsEnabled, theme } }));
+      toast.error('Failed to update theme');
     }
   };
 
@@ -59,7 +66,14 @@ export const Settings = () => {
           active: notificationsEnabled
         },
         { icon: Lock, label: 'Privacy', value: 'Standard' },
-        { icon: Moon, label: 'Theme', value: 'Dark' },
+        { 
+          icon: Moon, 
+          label: 'Theme', 
+          value: theme === 'dark' ? 'Dark' : 'Light',
+          onClick: toggleTheme,
+          isToggle: true,
+          active: theme === 'dark'
+        },
       ]
     },
     {

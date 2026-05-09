@@ -14,6 +14,7 @@ export interface User {
   isPremium?: boolean;
   settings?: {
     notificationsEnabled: boolean;
+    theme: 'light' | 'dark';
   };
 }
 

@@ -4,25 +4,26 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        background: "#0F0F13",
-        card: "#18181F",
-        border: "#2A2A35",
+        background: "var(--background)",
+        card: "var(--card)",
+        border: "var(--border)",
         primary: {
-          DEFAULT: "#FF4D6D",
-          hover: "#E63E5C",
+          DEFAULT: "var(--primary)",
+          hover: "var(--primary-hover)",
         },
         secondary: {
-          DEFAULT: "#7B61FF",
-          hover: "#6A52E5",
+          DEFAULT: "var(--secondary)",
+          hover: "var(--secondary-hover)",
         },
-        success: "#22C55E",
-        danger: "#EF4444",
+        success: "var(--success)",
+        danger: "var(--danger)",
         text: {
-          primary: "#FFFFFF",
-          secondary: "#B0B3C0",
+          primary: "var(--text-primary)",
+          secondary: "var(--text-secondary)",
         }
       },
       fontFamily: {

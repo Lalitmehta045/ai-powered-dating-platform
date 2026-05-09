@@ -9,6 +9,7 @@ interface UpdateProfilePayload {
   profileImage?: string; // Assume base64 or URL for now
   settings?: {
     notificationsEnabled: boolean;
+    theme: 'light' | 'dark';
   };
 }
 

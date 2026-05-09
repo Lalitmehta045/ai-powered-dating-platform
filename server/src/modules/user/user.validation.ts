@@ -17,6 +17,7 @@ export const updateProfileSchema = z.object({
   interests: z.array(z.string()).optional(),
   settings: z.object({
     notificationsEnabled: z.boolean().optional(),
+    theme: z.enum(["light", "dark"]).optional(),
   }).optional(),
 });
 
