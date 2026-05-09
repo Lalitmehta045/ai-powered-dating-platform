@@ -124,7 +124,7 @@ export const NotificationPanel = () => {
               initial={{ opacity: 0, y: 10, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 10, scale: 0.95 }}
-              className="absolute right-0 mt-4 w-80 glass-card rounded-2xl overflow-hidden z-50 border border-border shadow-2xl"
+              className="absolute -right-12 sm:right-0 mt-4 w-[calc(100vw-32px)] sm:w-80 glass-card rounded-2xl overflow-hidden z-50 border border-border shadow-2xl"
             >
               <div className="p-4 border-b border-border/50 flex justify-between items-center bg-card/80">
                 <h3 className="font-bold text-white">Notifications</h3>
