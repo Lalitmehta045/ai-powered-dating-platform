@@ -37,19 +37,19 @@ describe("Chat Endpoints", () => {
     });
   });
 
-  describe("GET /api/v1/chat/:userId", () => {
+  describe("GET /api/v1/chat/:matchId/messages", () => {
     it("should reject unauthenticated requests", async () => {
       const res = await request(app).get(
-        "/api/v1/chat/507f1f77bcf86cd799439011"
+        "/api/v1/chat/507f1f77bcf86cd799439011/messages"
       );
 
       expect(res.status).toBe(401);
       expect(res.body.success).toBe(false);
     });
 
-    it("should reject invalid userId format", async () => {
+    it("should reject invalid matchId format", async () => {
       const res = await request(app)
-        .get("/api/v1/chat/invalid-id")
+        .get("/api/v1/chat/invalid-id/messages")
         .set("Authorization", "Bearer invalid-token");
 
       // Either 401 (auth fails first) or 400 (validation fails)

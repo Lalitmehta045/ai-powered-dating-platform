@@ -15,7 +15,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ matchId }) => {
   const typingUsers = useSelector((state: RootState) => state.message.typingUsers);
   
   const { data: historyData, isLoading } = useGetChatHistoryQuery(matchId);
-  const messages = historyData?.data || [];
+  const messages = React.useMemo(() => historyData?.data || [], [historyData]);
   
   const bottomRef = useRef<HTMLDivElement>(null);
   const isTyping = !!typingUsers[matchId];
