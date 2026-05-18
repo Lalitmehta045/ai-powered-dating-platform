@@ -2,96 +2,14 @@ name: HeartSync CI/CD
 
 on:
   push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+    branches: [main]    # 
 
-jobs:
-  # ── Server Tests & Build ────────────────────────────────
-  server:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./server
-
+jobs:    # job ka naam
+  build:    
+    runs-on: ubuntu-latest  #  GitHub Runner (Free)
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-          cache-dependency-path: server/package-lock.json
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build
-        run: npm run build
-
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: server-dist
-          path: server/dist
-
-  # ── Client Build ────────────────────────────────────────
-  client:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./client
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-          cache-dependency-path: client/package-lock.json
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build
-        run: npm run build
-
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: client-dist
-          path: client/dist
-
-  # ── Deploy ──────────────────────────────────────────────
-  deploy:
-    needs: [server, client]
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Download server build
-        uses: actions/download-artifact@v4
-        with:
-          name: server-dist
-          path: server/dist
-
-      - name: Download client build
-        uses: actions/download-artifact@v4
-        with:
-          name: client-dist
-          path: client/dist
-
-      - name: Deploy to production
-        run: |
-          echo "🚀 HeartSync deployment ready"
-          echo "Server build: server/dist"
-          echo "Client build: client/dist"
-          # Add your deployment commands here:
-          # - Docker push to registry
-          # - SSH deploy to VPS
-          # - Vercel deploy for client
+    - name: Checkout code 
+      uses: actions/checkout@v4 # Clone the code into ubuntu-latest
+ 
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v4 # Docker ko build karne ke liye setup
